@@ -18,6 +18,10 @@
         width: 40px;
     }
 
+    #eye:hover {
+    opacity: 1;
+    }
+
     #logotipo{
         width: 90px;
     }
