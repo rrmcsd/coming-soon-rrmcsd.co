@@ -331,6 +331,7 @@ canvas {
     font-size: 32pt;
     letter-spacing: 2px;
     color: #181818;
+    cursor: pointer;
 }
 
 #text-modal span {
@@ -357,6 +358,9 @@ canvas {
     animation: fade-in 2s forwards;
     animation-delay: 2.5s;
     display: block;
+    position: absolute;
+    right: 25px;
+    top: 25px;
 }
 
 #fechar-modal:hover {
@@ -370,6 +374,7 @@ color: #a3fc83;
     left: 20px;
     top: 20px;
     transition: all 0.3s;
+    cursor: pointer;
 }
 
 #eye:hover {
