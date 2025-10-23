@@ -208,6 +208,13 @@ footer{
   fill: #a3fc83;
 }
 
+.links{
+    text-decoration: none;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+}
+
 #footer-text{
     font-weight: 400;
     font-size: 12pt;

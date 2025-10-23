@@ -1,4 +1,7 @@
 @media (max-width: 768px) {
+    body{
+        overflow: hidden;
+    }
 
     #text-modal{
         font-size: 20pt;
@@ -45,45 +48,6 @@
         animation: greenPulse 3.5s infinite ease-in-out;
         }
 
-        /* ✨ Efeito “cortina verde” */
-        @keyframes greenPulse {
-        0% {
-            fill: #dadada;
-        }
-            5% {
-            fill: #a3fc83;
-        }
-        10% {
-            fill: #a3fc83;
-        }
-        30% {
-            fill: #dadada;
-        }
-        100% {
-            fill: #dadada;
-        }
-        150% {
-            fill: #dadada;
-        }
-        }
-
-        /* 🔁 Atrasos individuais pra ficarem um após o outro */
-        .button-circle:nth-child(1) .icon-svg {
-        animation-delay: 0s;
-        }
-        .button-circle:nth-child(2) .icon-svg {
-        animation-delay: 0.3s;
-        }
-        .button-circle:nth-child(3) .icon-svg {
-        animation-delay: 0.6s;
-        }
-        .button-circle:nth-child(4) .icon-svg {
-        animation-delay: 1s;
-        }
-        .button-circle:nth-child(5) .icon-svg {
-        animation-delay: 1.3s;
-        }
-
     .button-circle:hover {
     transform: scale(1);
 
@@ -98,7 +62,32 @@
         margin-top: 30px;
     }
 
+    @keyframes greenPulse {
+    0% {
+        fill: #dadada;
+    }
+    5% {
+        fill: #a3fc83;
+    }
+    10% {
+        fill: #a3fc83;
+    }
+    30% {
+        fill: #dadada;
+    }
+    100% {
+        fill: #dadada;
+    }
+    150% {
+        fill: #dadada;
+    }
+    }
 
+    #social-media > a:nth-child(1) .icon-svg { animation-delay: 0s; }
+    #social-media > a:nth-child(2) .icon-svg { animation-delay: .3s; }
+    #social-media > a:nth-child(3) .icon-svg { animation-delay: .6s; }
+    #social-media > a:nth-child(4) .icon-svg { animation-delay: 1s; }
+    #social-media > a:nth-child(5) .icon-svg { animation-delay: 1.3s; }
 
 
 }
