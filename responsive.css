@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @media (max-width: 768px) {
     body{
         overflow: hidden;
@@ -94,4 +95,98 @@
     #social-media > a:nth-child(5) .icon-svg { animation-delay: 1.3s; }
 
 
+=======
+@media (max-width: 768px) {
+    body{
+        overflow: hidden;
+    }
+
+    #text-modal{
+        font-size: 20pt;
+        letter-spacing: 1px;
+    }
+
+    #fechar-modal{
+        width: 100px;
+        height: 30px;
+        font-size: 12pt;
+    }
+
+    #eye{
+        width: 40px;
+    }
+
+    #logotipo{
+        width: 90px;
+    }
+
+    #title{
+        font-size: 28pt;
+        letter-spacing: 2px;
+    }
+
+    footer{
+        width: 95%;
+        height: 160px;
+        justify-content: center;
+    }
+
+    #social-media{
+        width: 250px;
+        justify-content: space-around;
+    }
+
+    .button-circle{
+        width: 35px;
+        height: 35px;
+    }
+
+    .icon-svg{
+        width: 18px;
+        animation: greenPulse 3.5s infinite ease-in-out;
+        }
+
+    .button-circle:hover {
+    transform: scale(1);
+
+    }
+
+    .button-circle:hover .icon-svg {
+        fill: #dadada;
+    }
+
+    #footer-text{
+        font-size: 10pt;
+        margin-top: 30px;
+    }
+
+    @keyframes greenPulse {
+    0% {
+        fill: #dadada;
+    }
+    5% {
+        fill: #a3fc83;
+    }
+    10% {
+        fill: #a3fc83;
+    }
+    30% {
+        fill: #dadada;
+    }
+    100% {
+        fill: #dadada;
+    }
+    150% {
+        fill: #dadada;
+    }
+    }
+
+    #social-media > a:nth-child(1) .icon-svg { animation-delay: 0s; }
+    #social-media > a:nth-child(2) .icon-svg { animation-delay: .3s; }
+    #social-media > a:nth-child(3) .icon-svg { animation-delay: .6s; }
+    #social-media > a:nth-child(4) .icon-svg { animation-delay: 1s; }
+    #social-media > a:nth-child(5) .icon-svg { animation-delay: 1.3s; }
+
+
+>>>>>>> 73b2841 (links)
 }
