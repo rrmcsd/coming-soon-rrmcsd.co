@@ -32,6 +32,9 @@ function showModal() {
   modalSolutions.classList.add("fade-in-modal");
   modalSolutions.style.display = "flex";
   eye.style.opacity = "0"
+  if (window.$crisp) {
+    $crisp.push(["do", "chat:hide"]);
+  }
 }
 
 function hideModal() {
@@ -43,6 +46,9 @@ function hideModal() {
     if (modalSolutions.classList.contains("fade-out-modal")) {
       modalSolutions.style.display = "none";
       eye.style.opacity = "1"
+        if (window.$crisp) {
+          $crisp.push(["do", "chat:show"]);
+        }
     }
   }, FADE_OUT_DURATION);
 }
