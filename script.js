@@ -103,45 +103,45 @@ function applyBindings() {
 applyBindings();
 mqMobile.addEventListener("change", applyBindings);
 
-
-// Quebra o texto em letras individuais
+// Constrói HTML preservando quebras e espaços
 textModal.innerHTML = textModal.textContent
   .split("")
-  .map((char) => (char === "\n" ? "<br>" : `<span>${char}</span>`))
+  .map(char => {
+    if (char === "\n") return "<br>";
+    if (char === " ")  return `<span class="space">&nbsp;</span>`; // espaço preservado
+    return `<span class="char">${char}</span>`;                    // letra normal
+  })
   .join("");
 
-const spans = textModal.querySelectorAll("span");
+// Selecione apenas letras (ignora .space)
+const spans = textModal.querySelectorAll("span.char");
 
 // Função que “apaga” letras aleatórias e as reacende
 function randomFade() {
-  // Define quantas letras devem estar “apagadas” ao mesmo tempo
   const apagadas = 3;
-  
-  // Zera tudo pra “aceso”
-  spans.forEach((span) => (span.style.opacity = 1));
 
-  // Escolhe letras aleatórias para apagar parcialmente
-  const indices = [];
-  while (indices.length < apagadas) {
-    const randomIndex = Math.floor(Math.random() * spans.length);
-    if (!indices.includes(randomIndex) && spans[randomIndex].textContent.trim() !== "") {
-      indices.push(randomIndex);
-    }
+  // acende tudo
+  spans.forEach(span => (span.style.opacity = 1));
+
+  // escolhe letras aleatórias (somente .char)
+  const indices = new Set();
+  while (indices.size < apagadas) {
+    const i = Math.floor(Math.random() * spans.length);
+    indices.add(i);
   }
 
-  // Aplica opacidade reduzida nessas letras
-  indices.forEach((i) => {
-    spans[i].style.opacity = 0.25 + Math.random() * 0.25; // varia entre 0.25 e 0.5
+  // aplica opacidade reduzida
+  indices.forEach(i => {
+    spans[i].style.opacity = 0.25 + Math.random() * 0.25; // 0.25–0.5
   });
 }
 
-// Chama continuamente com intervalos irregulares (pra parecer orgânico)
+// loop orgânico
 function startFlicker() {
   randomFade();
-  const next = 600 + Math.random() * 1200; // 0.6s a 1.8s entre trocas
+  const next = 600 + Math.random() * 1200; // 0.6–1.8s
   setTimeout(startFlicker, next);
 }
-
 startFlicker();
 
 document.addEventListener("DOMContentLoaded", () => {

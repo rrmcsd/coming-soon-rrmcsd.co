@@ -50,7 +50,7 @@ canvas {
     position: absolute;
     background-color: #dadada;
     opacity: 0.98;
-    z-index: +1;
+    z-index: +99999999 !important;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -76,13 +76,20 @@ canvas {
     letter-spacing: 2px;
     color: #181818;
     cursor: pointer;
+    margin-top: -35px;
+    margin-left: -55px;
 }
 
 #text-modal span {
   display: inline-block;
   opacity: 1;
   transition: opacity 0.5s ease-in-out; /* transição bem suave */
-  
+  margin: 0;
+}
+
+#text-modal .space { 
+  opacity: 1;           /* espaço não “pisca” */
+  pointer-events: none; /* só pra evitar seleção */
 }
 
 #fechar-modal{
@@ -95,7 +102,7 @@ canvas {
     font-weight: 700;
     box-shadow: 2px 2.5px 2px #18181845;
     margin-top: 0px;
-    font-size: 14pt;
+    font-size: 12pt;
     transform-origin: top left;
     transition: all 0.5s;
     opacity: 0;
@@ -113,7 +120,7 @@ color: #a3fc83;
 }
 
 #eye{
-    width: 50px;
+    width: 40px;
     position: absolute;
     left: 20px;
     top: 20px;
@@ -133,9 +140,11 @@ color: #a3fc83;
 }
 
 #logotipo{
-    width: 200px;
+    width: 150px;
     display: block;
-    margin: 0 auto;
+    margin-top: -80px;
+    align-self: center;
+    
 }
 
 #title{
@@ -143,7 +152,7 @@ color: #a3fc83;
     font-weight: 800;
     text-align: center;
     color: #dadada;
-    font-size: 56pt;
+    font-size: 42pt;
     letter-spacing: 3px;
     margin-top: 20px;
     animation: fade-in 3s forwards;
@@ -171,7 +180,7 @@ footer{
 }
 
 #social-media{
-    width: 500px;
+    width: 400px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -180,8 +189,8 @@ footer{
 }
 
 .button-circle{
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border: 0;
     border-radius: 100px;
     background-color: #181818;
@@ -193,7 +202,7 @@ footer{
 }
 
 .icon-svg{
-    width: 24px;
+    width: 20px;
     fill: #dadada;
     vertical-align: middle;
     transform: translateY(2px);
