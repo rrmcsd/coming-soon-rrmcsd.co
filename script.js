@@ -2,6 +2,134 @@ const modalSolutions = document.getElementById("modal-solutions")
 const buttonFechar = document.getElementById("fechar-modal")
 const eye = document.getElementById("eye")
 const textModal = document.getElementById("text-modal");
+let showTimeout;
+const SHOW_DELAY = 200;   // ms
+const FADE_OUT_DURATION = 500; // deve bater com o CSS da animação
+const labelNews = document.getElementById("label-newsletter")
+const inputNews = document.getElementById("input-newsletter")
+const sendIcon = document.getElementById("icon-send")
+const sendButton = document.getElementById("button-newsletter")
+const divNews = document.getElementById("div-newsletter")
+let focusTO = null, blurTO = null;
+const modalMsg = document.getElementById("modal-msg")
+const fecharMsg = document.getElementById("fechar-msg")
+
+// === Apps Script Web App ===
+const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbxoZ_hbG0TaltuSjv9CpxvVvykrpBsCyZ-44f03bTEs9O2DVUaA75SWBMUNMhgzff3n/exec";
+const API_KEY = "MINHA_CHAVE_SECRETA_RRMCSD_2025_!@#F3q8x";
+
+// Envia sem ler resposta (evita erro de CORS no console)
+async function subscribeLead(email, nome = "") {
+  const payload = {
+    key: API_KEY,
+    email: String(email || "").trim().toLowerCase(),
+    nome: String(nome || "").trim(),
+    source: "rrmcsd-coming-soon",
+    userAgent: navigator.userAgent
+  };
+
+  try {
+    // não defina Content-Type; use no-cors; keepalive ajuda ao fechar a aba rápido
+    await fetch(APPSCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      keepalive: true,
+      body: JSON.stringify(payload)
+    });
+    return { ok: true, opaque: true }; // não há leitura do JSON de volta
+  } catch (e) {
+    return { ok: false, error: String(e) };
+  }
+}
+
+// Se estiver usando <form>, garanta que o botão NÃO submeta:
+const form = document.getElementById("newsletter");
+if (form) form.addEventListener("submit", e => e.preventDefault());
+
+sendButton.addEventListener("click", async (ev) => {
+  ev?.preventDefault?.();
+
+  if (inputNews.value.includes("@") && validateEmail(inputNews.value)) {
+    sendButton.disabled = true;
+    sendIcon.style.opacity = "0.6";
+
+    const resp = await subscribeLead(inputNews.value);
+
+    if (resp.ok) {
+      // === sua UX atual de sucesso ===
+      inputNews.classList.add("fade-bottom-out");
+      startConfetti();
+
+      setTimeout(() => {
+        inputNews.style.display = "none";
+        labelNews.style.display = "none";
+        sendIcon.style.marginRight = "3px";
+        divNews.style.width = "45px";
+        divNews.style.padding = "0px";
+        divNews.classList.add("color-loop");
+        sendIcon.classList.add("zoom-in-out");
+        modalMsg.classList.add("fade-bottom-in");
+        modalMsg.style.display = "flex";
+        setTimeout(() => { divNews.classList.add("fade-bottom-out"); }, 800);
+      }, 400);
+    } else {
+      // erro de rede
+      inputNews.value = "";
+      inputNews.style.border = "solid 2px #ed3e3eff";
+    }
+
+    sendButton.disabled = false;
+    sendIcon.style.opacity = "1";
+  } else {
+    inputNews.value = "";
+    inputNews.style.border = "solid 2px #ed3e3eff";
+  }
+});
+
+fecharMsg.addEventListener("click", () => {
+  modalMsg.classList.remove("fade-bottom-in")
+  modalMsg.classList.add("fade-bottom-out")
+  setTimeout(() => {
+    modalMsg.style.display = "none"
+  }, 1000);
+})
+
+function validateEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+ // Função da animação de confete
+  function startConfetti() {
+    const duration = 500;
+    const end = Date.now() + duration;
+
+    function frame() {
+      confetti({
+        particleCount: 5,
+        angle: 60,
+        spread: 100,
+        origin: { x: 0 },
+        colors: ['#dadada', '#176b39', '#a3fc83'],
+        drift: 0.0
+      });
+
+      confetti({
+        particleCount: 5,
+        angle: 120,
+        spread: 100,
+        origin: { x: 1 },
+        colors: ['#dadada', '#176b39', '#a3fc83'],
+        drift: 0.0
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    }
+
+    frame();
+  }
 
 function textAnimation() {
   const dots = document.getElementById("dots");
@@ -20,12 +148,6 @@ function textAnimation() {
 }
 
 textAnimation();
-
-let showTimeout;
-
-// ---- helpers ----
-const SHOW_DELAY = 200;   // ms
-const FADE_OUT_DURATION = 500; // deve bater com o CSS da animação
 
 function showModal() {
   modalSolutions.classList.remove("fade-out-modal");
@@ -293,3 +415,76 @@ document.addEventListener("DOMContentLoaded", () => {
   init();
   animate();
 });
+
+(function mobileDesktopHooks(){
+  function runMobileOnly() {
+    labelNews.addEventListener("click", () => {
+      labelNews.classList.remove("fade-bottom-in")
+      inputNews.classList.remove("fade-bottom-out")
+      labelNews.classList.add("fade-bottom-out")
+      inputNews.classList.add("fade-bottom-in")
+      setTimeout(() => {
+        sendButton.style.pointerEvents = "all"
+        sendButton.style.display = "block"
+        inputNews.style.display = "block"
+        labelNews.style.display = "none"
+      }, 450);
+    });
+
+    divNews.addEventListener("mouseleave", () => {
+      inputNews.value = ""
+      labelNews.classList.remove("fade-bottom-out")
+      inputNews.classList.remove("fade-bottom-in")
+      labelNews.classList.add("fade-bottom-in")
+      inputNews.classList.add("fade-bottom-out")
+      setTimeout(() => {
+        inputNews.style.display = "none"
+        labelNews.style.display = "block"
+        sendButton.style.pointerEvents = "none"
+      }, 450);
+    })
+  }
+
+  function runDesktopOnly() {
+  inputNews.addEventListener("focus", () => {
+    clearTimeout(blurTO);
+    labelNews.classList.remove("fade-bottom-in");
+    labelNews.classList.add("fade-bottom-out");
+    sendButton.classList.add("fade-bottom-in")
+    focusTO = setTimeout(() => {
+      sendButton.style.display = "block"
+      inputNews.style.width = "400px";
+      labelNews.style.display = "none";
+    }, 450);
+  });
+
+  // BLUR: só traz o label de volta se o foco NÃO foi para o botão
+  inputNews.addEventListener("focusout", (e) => {
+    // se o foco foi para o botão (ou algo dentro dele), não faz nada
+    const to = e.relatedTarget;
+    if (to && (to === sendButton || sendButton.contains(to))) return;
+
+    clearTimeout(focusTO);
+    inputNews.value = ""
+    inputNews.style.border = "solid 2px #181818"
+    sendButton.classList.remove("fade-bottom-in")
+    sendButton.classList.add("fade-bottom-out")
+    labelNews.classList.remove("fade-bottom-out");
+    labelNews.classList.add("fade-bottom-in");
+    blurTO = setTimeout(() => {
+      sendButton.style.display = "none"
+      inputNews.style.width = "300px";
+      labelNews.style.display = "inline-block";
+    }, 450);
+  });
+
+  }
+
+  function applyHooks(){
+    if (mqMobile.matches) runMobileOnly();
+    else runDesktopOnly();
+  }
+
+  applyHooks();
+  mqMobile.addEventListener("change", applyHooks);
+})();

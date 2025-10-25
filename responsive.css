@@ -15,6 +15,56 @@
         font-size: 14pt;
     }
 
+    #div-newsletter{
+        padding: 0px 10px;
+    }
+
+    #label-newsletter{
+        margin-right: 0px;
+    }
+
+    #input-newsletter{
+        display: none;
+        width: 270px;
+    }
+    
+    #button-newsletter{
+        display: block;
+        animation-delay: 0.5s;
+        opacity: 1;
+        pointer-events: none;
+    }
+
+    #icon-send{
+        width: 18px;
+        margin-right: 5px;
+    }
+
+    #modal-msg{
+        width: 380px;
+        height: 400px;
+        gap: 30px;
+        text-align: center;
+    }
+
+    #title-msg{
+        margin-top: 30px;
+    }
+
+    .body-text-msg{
+        font-size: 14pt;
+    }
+
+    #link-msg{
+        font-size: 12pt;
+    }
+
+    #fechar-msg{
+        font-size: 16pt;
+        width: 40px;
+        height: 40px;
+    }
+
     #eye{
         width: 40px;
     }
@@ -24,7 +74,7 @@
     }
 
     #logotipo{
-        width: 220px;
+        width: 200px;
     }
 
     #title{
@@ -45,12 +95,12 @@
     }
 
     .button-circle{
-        width: 50px;
-        height: 50px;
+        width: 45px;
+        height: 45px;
     }
 
     .icon-svg{
-        width: 24px;
+        width: 20px;
         animation: greenPulse 3.5s infinite ease-in-out;
         }
 

@@ -15,7 +15,7 @@
   <!-- Cores do navegador -->
   <meta name="theme-color" content="#a3fc83">
   <meta name="msapplication-navbutton-color" content="#a3fc83">
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <!-- Favicon -->
@@ -39,6 +39,20 @@
     <source src="images/video.mp4" type="video/mp4" />
   </video>
 </div>
+
+<div id="modal-msg">
+    <button id="fechar-msg">X</button>
+    <h2 id="title-msg">Obrigado por se inscrever!</h2>
+    <p class="body-text-msg">
+        A partir de agora você receberá semanalmente
+        conteúdos sobre soluções de marketing e comunicação 
+        para o seu negócio. 
+    </p>
+    <a href="/cancelamento" id="link-msg">
+        Cancelar assinatura ➡️
+    </a>
+</div>
+
 <div id="modal-solutions" class="fade-in-modal">
     <canvas id="particleCanvas"></canvas>
     <div id="left-itens">
@@ -57,6 +71,20 @@
 <menu>
 <img src="images/eye.webp" alt="Logomarca/Olho" id="eye">
 </menu>
+<form id="newsletter">
+    <div id="div-newsletter" novalidate>
+        <label id="label-newsletter" for="input-newsletter">Newsletter</label>
+        <input type="email" id="input-newsletter" placeholder="Seu melhor e-mail">
+        <button id="button-newsletter"  type="button">
+        <div id="icon-send">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+                    <path d="M435.62,40.64L35.91,251.06c-14.85,12.4-12.68,35.03,4.05,44.64l127.05,43.54,219.26-204.18-176.4,219.29,180.45,61.76c16.24,3.45,29.85-4.47,33.7-20.6l50.01-329.22c-.13-20.15-19.62-33.59-38.4-25.65Z"/>
+                    <path d="M183.54,439.63c0,1.05,3.55,8.64,4.47,10.15,8.54,13.89,28.91,15.73,40.83,4.94l57.99-52.12-103.29-35.58v72.61Z"/>
+                </svg>
+        </div>
+        </button>
+    </div>
+</form>
 <div class="container-center">
 <img id="logotipo" src="images/logo-branco.webp" alt="Renan Ribeiro - Marketing, Comunicação e Soluções Digitais">
 <h1 id="title">
@@ -125,6 +153,8 @@
         © Todos os direitos reservados | 2025 
     </h3>
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
