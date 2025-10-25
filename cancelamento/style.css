@@ -15,6 +15,7 @@ body {
     background-color: transparent;
     position: relative;
     background-color: #a3fc83;
+    overflow-x: hidden;
 }
 
 canvas {
