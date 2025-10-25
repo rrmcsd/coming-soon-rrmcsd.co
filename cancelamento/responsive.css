@@ -34,21 +34,25 @@
     }
 
     .container{
-        top: 250px;
+        padding: 0;
     }
 
     .inner-container{
-        width: 150px;
+        width: 140px;
+        margin: 0;
+        padding: 0;
     }
 
     h1{
-        margin-bottom: 25px;
+        font-size: 14pt;
+        letter-spacing: 0.8px;
+        margin-bottom: 20px;
     }
 
     input{
-        width: 320px;
+        width: 240px;
         height: 45px;
-        font-size: 13pt;
+        font-size: 11pt;
     }
     
     button{
