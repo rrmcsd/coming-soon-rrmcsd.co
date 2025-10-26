@@ -26,108 +26,120 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&display=swap" rel="stylesheet">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css">
+    <!-- ===== Hotwire Turbo ===== -->
+  <script src="https://unpkg.com/@hotwired/turbo@8.0.4/dist/turbo.es2017-umd.js" defer></script>
+
+  <!-- ===== Estilos e scripts globais ===== -->
+  <link rel="stylesheet" href="/style.css" data-turbo-track="reload">
+  <link rel="stylesheet" href="/responsive.css" data-turbo-track="reload">
+  <script src="/script.js" defer data-turbo-track="reload"></script>
+
+  <!-- ===== Preloads ===== -->
+  <link rel="preload" as="image" href="/images/eye.gif">
 
   <title>RRMCSD</title>
 </head>
-<body>
+<body id="body-privacidade-uso" class="body-uso">
 
-<div class="video-background">
+<div id="eye-layer" data-turbo-permanent aria-hidden="true">
+  <img id="eye-img" data-turbo-permanent
+       src="/images/eye.gif"
+       class="eye"
+       alt="Animação do Olho"
+       draggable="false">
+</div>
+
+ <main id="page" data-route="uso">
+<div class="video-background video-privacidade-uso">
   <video autoplay muted loop playsinline>
     <source src="../images/video-privacidade.mp4" type="video/mp4" />
   </video>
 </div>
-
-<menu>
-<a href="/">
-<img src="../images/eye.gif" alt="Logomarca/Olho" id="eye">
-</a>
-</menu>
-    <h1>Termos de Uso</h1>
-    <h2 class="update"><b>Última atualização: </b>25 de outubro de 2025</h2>
-    <p>
+    <h1 class="h1-privacidade-uso">Termos de Uso</h1>
+    <h2 class="h2-privacidade-uso update"><b class="bold-privacidade-uso">Última atualização: </b>25 de outubro de 2025</h2>
+    <p class="p-privacidade-uso">
         Ao acessar o site https://rrmcsd.co, 
-        <a href="https://rrmcsd.co">
+        <a class="a-privacidade-uso a-uso" href="https://rrmcsd.co">
             https://rrmcsd.co</a>.
         você concorda com os presentes 
         Termos de Uso. Caso não concorde, 
         recomendamos que não utilize o site.
         </p>
-    <hr>
-    <h3>1. Uso do site</h3>
-    <p>
+    <hr class="hr-privacidade-uso hr-uso">
+    <h3 class="h3-privacidade-uso h3-uso">1. Uso do site</h3>
+    <p class="p-privacidade-uso">
     O conteúdo do site RRMCSD é 
-    disponibilizado para fins <b>informativos</b>, 
-    <b>institucionais</b> e 
-    <b>educacionais</b>. É proibido:
+    disponibilizado para fins <b class="bold-privacidade-uso">informativos</b>, 
+    <b class="bold-privacidade-uso">institucionais</b> e 
+    <b class="bold-privacidade-uso">educacionais</b>. É proibido:
     </p>
 
-    <li class="first-li">
+    <li class="li-privacidade-uso li-uso first-li">
         Reproduzir, distribuir ou modificar qualquer 
         conteúdo sem autorização;
     </li>
-    <li>
+    <li class="li-privacidade-uso li-uso">
         Utilizar o site para atividades ilegais, 
         ofensivas ou que prejudiquem terceiros;
     </li>
-    <li class="last-li">
+    <li class="li-privacidade-uso li-uso last-li">
         Inserir scripts, automações ou tentativas de acesso não autorizado aos servidores.
     </li>
     
-    <hr>
+    <hr class="hr-privacidade-uso hr-uso">
     
-    <h3>2. Propriedade intelectual</h3>
-    <p>
+    <h3 class="h3-privacidade-uso h3-uso">2. Propriedade intelectual</h3>
+    <p class="p-privacidade-uso">
     Todo o conteúdo presente no site — textos, imagens, logotipos, 
     marcas, layout e demais elementos — é de propriedade 
-    exclusiva da <b>RRMCSD</b> e está protegido pelas leis 
+    exclusiva da <b class="bold-privacidade-uso">RRMCSD</b> e está protegido pelas leis 
     de direitos autorais e de propriedade industrial 
     vigentes no Brasil.
     </p>
     
-    <hr>
+    <hr class="hr-privacidade-uso hr-uso">
 
-    <h3>3. Responsabilidade</h3>
-    <p>A RRMCSD não se responsabiliza por:</p>
-    <li class="first-li">
+    <h3 class="h3-privacidade-uso h3-uso">3. Responsabilidade</h3>
+    <p class="p-privacidade-uso">A RRMCSD não se responsabiliza por:</p>
+    <li class="li-privacidade-uso li-uso first-li">
         Interrupções temporárias no funcionamento do site;
     </li>
-    <li>
+    <li class="li-privacidade-uso li-uso">
         Conteúdos de links externos, mesmo quando indicados 
         em nossas páginas;
     </li>
-    <li class="last-li">
+    <li class="li-privacidade-uso li-uso last-li">
         Ações de terceiros ou incidentes fora do 
         controle técnico da marca.
     </li>
-    <hr>
+    <hr class="hr-privacidade-uso hr-uso">
 
-    <h3>4. Comunicação</h3>
-    <p>Ao fornecer seu e-mail, telefone ou outras 
+    <h3 class="h3-privacidade-uso h3-uso">4. Comunicação</h3>
+    <p class="p-privacidade-uso">Ao fornecer seu e-mail, telefone ou outras 
         informações de contato, o usuário autoriza o 
         envio de comunicações relacionadas à RRMCSD, 
         podendo cancelar a qualquer momento.
     </p>
-    <hr>
+    <hr class="hr-privacidade-uso hr-uso">
 
-    <h3>5. Alterações dos termos</h3>
-    <p>
+    <h3 class="h3-privacidade-uso h3-uso">5. Alterações dos termos</h3>
+    <p class="p-privacidade-uso">
         A RRMCSD pode revisar estes Termos a qualquer 
         momento, publicando a versão atualizada 
         via e-mail ou nesta mesma página, com data de revisão 
         indicada no topo.
     </p>
-    <hr>
+    <hr class="hr-privacidade-uso hr-uso">
 
-    <h3>6. Foro e legislação aplicável</h3>
-    <p>
+    <h3 class="h3-privacidade-uso h3-uso">6. Foro e legislação aplicável</h3>
+    <p class="p-privacidade-uso">
         Estes Termos são regidos pelas leis da República Federativa do 
         Brasil. Fica eleito o foro da Comarca de 
         Pinheiros/São Paulo – SP para dirimir quaisquer 
         controvérsias decorrentes destes Termos.
 
     </p>
-    <hr>
+    <hr class="hr-privacidade-uso hr-uso">
+</main>
 </body>
 </html>

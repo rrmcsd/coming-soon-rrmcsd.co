@@ -26,146 +26,159 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&display=swap" rel="stylesheet">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css">
+    <!-- ===== Hotwire Turbo ===== -->
+  <script src="https://unpkg.com/@hotwired/turbo@8.0.4/dist/turbo.es2017-umd.js" defer></script>
+
+  <!-- ===== Estilos e scripts globais ===== -->
+  <link rel="stylesheet" href="/style.css" data-turbo-track="reload">
+  <link rel="stylesheet" href="/responsive.css" data-turbo-track="reload">
+  <script src="/script.js" defer data-turbo-track="reload"></script>
+
+  <!-- ===== Preloads ===== -->
+  <link rel="preload" as="image" href="/images/eye.gif">
 
   <title>RRMCSD</title>
 </head>
-<body>
+<body id="body-privacidade-uso" class="body-privacidade">
 
-<div class="video-background">
+<div id="eye-layer" data-turbo-permanent aria-hidden="true">
+  <img id="eye-img" data-turbo-permanent
+       src="/images/eye.gif"
+       class="eye"
+       alt="Animação do Olho"
+       draggable="false">
+</div>
+
+<main id="page" data-route="privacidade">
+<div class="video-background video-privacidade-uso">
   <video autoplay muted loop playsinline>
     <source src="../images/video-privacidade.mp4" type="video/mp4" />
   </video>
 </div>
 
-<menu>
-<a href="/">
-<img src="../images/eye.gif" alt="Logomarca/Olho" id="eye">
-</a>
-</menu>
-    <h1>Política de Privacidade</h1>
-    <h2 class="update"><b>Última atualização: </b>25 de outubro de 2025</h2>
-    <p>A RRMCSD valoriza a privacidade e a segurança 
+    <h1 class="h1-privacidade-uso">Política de Privacidade</h1>
+    <h2 class="h2-privacidade-uso update"><b class="bold-privacidade-uso">Última atualização: </b>25 de outubro de 2025</h2>
+    <p class="p-privacidade-uso">A RRMCSD valoriza a privacidade e a segurança 
         dos dados de seus(a) visitantes. Esta Política 
         explica como coletamos, usamos e protegemos 
         suas informações pessoais durante o uso de 
-        nosso site <a href="https://rrmcsd.co">
+        nosso site <a class="a-privacidade-uso a-privacidade" href="https://rrmcsd.co">
             https://rrmcsd.co</a>.
         </p>
-    <hr>
-    <h3>1. Dados coletados</h3>
-    <p>
+    <hr class="hr-privacidade-uso hr-privacidade">
+    <h3 class="h3-privacidade-uso h3-privacidade">1. Dados coletados</h3>
+    <p class="p-privacidade-uso">
     Coletamos apenas os dados estritamente 
     necessários para comunicação e 
     relacionamento com nossos(a) visitantes:
     </p>
 
-    <li class="first-li">Nome</li>
-    <li>E-mail</li>
-    <li class="last-li">Telefone</li>
+    <li class="li-privacidade-uso li-privacidade">Nome</li>
+    <li class="li-privacidade-uso li-privacidade">E-mail</li>
+    <li class="li-privacidade-uso li-privacidade last-li">Telefone</li>
 
-    <p>
+    <p class="p-privacidade-uso">
     Essas informações podem ser 
     fornecidas de forma voluntária 
     por meio:
     </p>
     
-    <li class="first-li">do formulário de 
+    <li class="li-privacidade-uso li-privacidade">do formulário de 
         newsletter(Google Cloud);
     </li> 
-    <li class="last-li">do chat online (Crisp Chat).</li>
+    <li class="li-privacidade-uso li-privacidade last-li">do chat online (Crisp Chat).</li>
 
-    <hr>
+    <hr class="hr-privacidade-uso hr-privacidade">
     
-    <h3>2. Finalidade do uso</h3>
-    <p>
+    <h3 class="h3-privacidade-uso h3-privacidade">2. Finalidade do uso</h3>
+    <p class="p-privacidade-uso">
     Os dados são utilizados 
     exclusivamente para:
     </p>
     
-    <li class="first-li">Envio de comunicações, 
+    <li class="li-privacidade-uso li-privacidade">Envio de comunicações, 
     atualizações e conteúdos da 
     marca RRMCSD;
     </li>    
-    <li>Atendimento a dúvidas e 
+    <li class="li-privacidade-uso li-privacidade">Atendimento a dúvidas e 
     solicitações enviadas via chat;
     </li>
-    <li class="last-li">
+    <li class="li-privacidade-uso li-privacidade last-li">
     Melhoria contínua da experiência 
     do(a) usuário(a) no site.
     </li>
 
-    <p>
+    <p class="p-privacidade-uso">
     Não realizamos venda, compartilhamento ou 
     cessão de dados a terceiros com fins comerciais.
     </p>
-    <hr>
-    <h3>3. Armazenamento e segurança</h3>
-    <p>Os dados são armazenados em ambientes seguros, com uso das 
+    <hr class="hr-privacidade-uso hr-privacidade">
+    <h3 class="h3-privacidade-uso h3-privacidade">3. Armazenamento e segurança</h3>
+    <p class="p-privacidade-uso">Os dados são armazenados em ambientes seguros, com uso das 
         tecnologias fornecidas por 
-        <a href="https://cloud.google.com/">
+        <a class="a-privacidade-uso a-privacidade" href="https://cloud.google.com/">
             Google Cloud</a> 
-        e <a href="https://crisp.chat/pt/">
+        e <a class="a-privacidade-uso a-privacidade" href="https://crisp.chat/pt/">
             Crisp Chat</a>, 
         que seguem padrões internacionais de segurança e 
         conformidade (GDPR e LGPD).
     </p>
-    <p>
+    <p class="p-privacidade-uso">
         A RRMCSD adota medidas técnicas e administrativas 
         adequadas para proteger seus dados contra acesso, 
         uso ou divulgação não autorizados.
     </p>
-    <hr>
+    <hr class="hr-privacidade-uso hr-privacidade">
 
-    <h3>4. Direitos do titular</h3>
-    <p>Nos termos da LGPD, o(a) usuário(a) pode, a qualquer momento:</p>
+    <h3 class="h3-privacidade-uso h3-privacidade">4. Direitos do titular</h3>
+    <p class="p-privacidade-uso">Nos termos da LGPD, o(a) usuário(a) pode, a qualquer momento:</p>
     
-    <li class="first-li">
+    <li class="li-privacidade-uso li-privacidade">
     Solicitar acesso, correção ou exclusão de seus dados;
     </li>
-    <li>
+    <li class="li-privacidade-uso li-privacidade">
     Revogar consentimentos concedidos;           
     </li>
-    <li class="last-li">
+    <li class="li-privacidade-uso li-privacidade last-li">
     Solicitar informações sobre o tratamento de seus dados.
     </li>
 
-    <p>
+    <p class="p-privacidade-uso">
         Para exercer esses direitos, envie um e-mail 
         para 
-        <a href="mailto:renanribeiro.mcsd@gmail.com">
+        <a class="a-privacidade-uso a-privacidade" href="mailto:renanribeiro.mcsd@gmail.com">
             renanribeiro.mcsd@gmail.com
         </a> 
         ou entre em contato pelos
         canais de contato amplamente divulgados.
     </p>
-    <hr>
-    <h3>5. Cookies e tecnologias similares</h3>
-    <p>
+    <hr class="hr-privacidade-uso hr-privacidade">
+    <h3 class="h3-privacidade-uso h3-privacidade">5. Cookies e tecnologias similares</h3>
+    <p class="p-privacidade-uso">
         Utilizamos cookies apenas para fins 
         funcionais e de análise anônima de tráfego. 
         O(a) usuário(a) pode gerenciar ou desativar os 
         cookies em seu navegador a qualquer momento.
     </p>
-    <hr>
+    <hr class="hr-privacidade-uso hr-privacidade">
 
-    <h3>6. Alterações nesta política</h3>
-    <p>Podemos atualizar esta Política periodicamente. 
+    <h3 class="h3-privacidade-uso h3-privacidade">6. Alterações nesta política</h3>
+    <p class="p-privacidade-uso">Podemos atualizar esta Política periodicamente. 
         Recomendamos a leitura regular desta página ou dos
         e-mails semanalmente enviados em nossa Newsletter,
         para se manter informado(a) sobre eventuais mudanças.
     </p>
-    <hr>
+    <hr class="hr-privacidade-uso hr-privacidade">
 
-    <h3>7. Controlador de dados</h3>
-    <p class="dados"><b>RRMCSD</p>
-    <p class="dados"><b>CNPJ:</b> 46.215.629/0001-50</p>
-    <p class="dados"><b>E-mail:</b> 
-        <a href="mailto:renanribeiro.mcsd@gmail.com">
+    <h3 class="h3-privacidade-uso h3-privacidade">7. Controlador de dados</h3>
+    <p class="dados"><b class="bold-privacidade-uso">RRMCSD</p>
+    <p class="dados"><b class="bold-privacidade-uso">CNPJ:</b> 46.215.629/0001-50</p>
+    <p class="dados"><b class="bold-privacidade-uso">E-mail:</b> 
+        <a class="a-privacidade-uso a-privacidade" href="mailto:renanribeiro.mcsd@gmail.com">
         renanribeiro.mcsd@gmail.com
         </a>
     </p>
-    <p class="dados"><b>Endereço:</b> São Paulo – SP – Brasil</p>
+    <p class="dados"><b class="bold-privacidade-uso">Endereço:</b> Morumbi - São Paulo, SP – Brasil</p>
+</main>
 </body>
 </html>

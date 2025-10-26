@@ -26,39 +26,57 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&display=swap" rel="stylesheet">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="responsive.css">
+    <!-- ===== Hotwire Turbo ===== -->
+  <script src="https://unpkg.com/@hotwired/turbo@8.0.4/dist/turbo.es2017-umd.js" defer></script>
+
+  <!-- ===== Estilos e scripts globais ===== -->
+  <link rel="stylesheet" href="/style.css" data-turbo-track="reload">
+  <link rel="stylesheet" href="/responsive.css" data-turbo-track="reload">
+  <script src="/script.js" defer data-turbo-track="reload"></script>
+
+  <!-- ===== Preloads ===== -->
+  <link rel="preload" as="image" href="/images/eye.gif">
 
   <title>RRMCSD</title>
 </head>
-<body>
-<div class="video-background">
+<body id="body-cancel">
+
+<div id="eye-layer" data-turbo-permanent aria-hidden="true">
+  <img id="eye-img" data-turbo-permanent
+       src="/images/eye.gif"
+       class="eye"
+       alt="Animação do Olho"
+       draggable="false">
+</div>
+
+<div id="modal-root" data-turbo-permanent></div>
+
+<canvas id="particleCanvas" data-modal hidden></canvas>
+
+<div class="video-background video-cancel">
   <video autoplay muted loop playsinline>
     <source src="../images/video-cancelamento.mp4" type="video/mp4" />
   </video>
 </div>
-<canvas id="particleCanvas"></canvas>
-<div id="modal-msg">
-    <button id="fechar-msg">X</button>
-    <h2 id="title-msg">Excluimos seu e-mail</h2>
+
+<div id="modal-msg-cancel" class="modal-msg" data-modal hidden>
+    <button id="fechar-msg-cancel" class="fechar-msg">X</button>
+    <h2 class="title-msg">Excluimos seu e-mail</h2>
     <p class="body-text-msg">
         A partir de agora você não irá mais
         receber conteúdos da RRMCSD relacionados a
         NEWSLETTER semanal.
     </p>
-    <a href="/" id="link-msg">
+    <a href="/" id="link-msg-cancel">
         Ir para o site ➡️
     </a>
 </div>
-<menu>
-<a href="/">
-<img src="../images/eye.gif" alt="Logomarca/Olho" id="eye">
-</a>
-</menu>
+
+<main id="page" data-route="cancelamento">
+
 <div class="container">
 	<div class="inner-container">
-<svg id="svg" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 590 484.7">
+<svg id="svg-envelope" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 590 484.7">
   <g id="envelope">
     <path id="Background" d="M452.9,376.3a26.1,26.1,0,0,1-25.5,20.8H162.6a26.1,26.1,0,0,1-26-26V193.2a26.1,26.1,0,0,1,26-26H427.4a26.1,26.1,0,0,1,26,26V371.1a25.9,25.9,0,0,1-.5,5.2" fill="#176b3975" stroke="#181818" stroke-miterlimit="10" stroke-width="5"/>
     <g id="paper-group">
@@ -75,7 +93,7 @@
           </g>
         </g>
         <g id="eye-group">
-          <g id="eyes" class="eyes">
+          <g id="eyes" class="eyes-cancel">
             <ellipse id="eye-right" cx="349" cy="172.8" rx="11.2" ry="13.8" fill="#181818" stroke-linecap="round" stroke-miterlimit="10" stroke-width="5" />
             <ellipse id="eye-left" cx="235.5" cy="172.8" rx="11.2" ry="13.8" fill="#181818" stroke-linecap="round" stroke-miterlimit="10" stroke-width="5" />         <path id="eyebrow-sad-right" d="M341.9,133.7c2.6,5.3,14.8,14.1,24.3,14.7" fill="none" stroke="#181818" stroke-linecap="round" stroke-miterlimit="10" stroke-width="5"/>
             <path id="eyebrow-sad-left" d="M240.7,133.7c-2.6,5.3-14.8,14.1-24.3,14.7" fill="none" stroke="#181818" stroke-linecap="round" stroke-miterlimit="10" stroke-width="5"/>
@@ -120,6 +138,6 @@
         </button>
 </div>
 </form>
-<script src="script.js"></script>
+</main>
 </body>
 </html>

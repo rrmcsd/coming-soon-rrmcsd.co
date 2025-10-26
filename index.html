@@ -26,34 +26,33 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&display=swap" rel="stylesheet">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="responsive.css">
+    <!-- ===== Hotwire Turbo ===== -->
+  <script src="https://unpkg.com/@hotwired/turbo@8.0.4/dist/turbo.es2017-umd.js" defer></script>
+
+  <!-- ===== Estilos e scripts globais ===== -->
+  <link rel="stylesheet" href="/style.css" data-turbo-track="reload">
+  <link rel="stylesheet" href="/responsive.css" data-turbo-track="reload">
+  <script src="/script.js" defer data-turbo-track="reload"></script>
+
+  <!-- ===== Preloads ===== -->
+  <link rel="preload" as="image" href="/images/eye.gif">
 
   <title>RRMCSD</title>
 </head>
-<body>
+<body id="body-home">
 
-<div class="video-background">
-  <video autoplay muted loop playsinline>
-    <source src="images/video.mp4" type="video/mp4" />
-  </video>
+<div id="eye-layer" data-turbo-permanent aria-hidden="true">
+  <img id="eye-img" data-turbo-permanent
+       src="/images/eye.gif"
+       class="eye"
+       alt="Animação do Olho"
+       draggable="false">
 </div>
 
-<div id="modal-msg">
-    <button id="fechar-msg">X</button>
-    <h2 id="title-msg">Obrigado por se inscrever!</h2>
-    <p class="body-text-msg">
-        A partir de agora você receberá semanalmente
-        conteúdos sobre soluções de marketing e comunicação 
-        para o seu negócio. 
-    </p>
-    <a href="/cancelamento" id="link-msg">
-        Cancelar assinatura ➡️
-    </a>
-</div>
+    <!-- NOVO: raiz global de modais -->
+    <div id="modal-root" data-turbo-permanent></div>
 
-<div id="modal-solutions" class="fade-in-modal">
+    <div id="modal-solutions" class="fade-in-modal" data-modal hidden>
     <canvas id="particleCanvas"></canvas>
     <div id="left-itens">
     <h2 id="text-modal">
@@ -66,32 +65,22 @@
         fechar
     </button>
     </div>
-</div>
-<script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="e40eeabe-75d9-404a-bf4e-19267d188b1d";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
-<menu>
-<img src="images/eye.gif" alt="Logomarca/Olho" id="eye">
-</menu>
-<form id="newsletter">
-    <div id="div-newsletter" novalidate>
-        <label id="label-newsletter" for="input-newsletter">Newsletter</label>
-        <input type="email" id="input-newsletter" placeholder="Seu melhor e-mail">
-        <button id="button-newsletter"  type="button">
-        <div id="icon-send">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
-                    <path d="M435.62,40.64L35.91,251.06c-14.85,12.4-12.68,35.03,4.05,44.64l127.05,43.54,219.26-204.18-176.4,219.29,180.45,61.76c16.24,3.45,29.85-4.47,33.7-20.6l50.01-329.22c-.13-20.15-19.62-33.59-38.4-25.65Z"/>
-                    <path d="M183.54,439.63c0,1.05,3.55,8.64,4.47,10.15,8.54,13.89,28.91,15.73,40.83,4.94l57.99-52.12-103.29-35.58v72.61Z"/>
-                </svg>
-        </div>
-        </button>
     </div>
-</form>
-<div class="container-center">
-<img id="logotipo" src="images/logo-branco.webp" alt="Renan Ribeiro - Marketing, Comunicação e Soluções Digitais">
-<h1 id="title">
-    em breve<span id="dots"></span>
-</h1>
+
+    <div id="modal-msg-home" class="modal-msg" data-modal hidden>
+    <button id="fechar-msg-home" class="fechar-msg">X</button>
+    <h2 class="title-msg">Obrigado por se inscrever!</h2>
+    <p class="body-text-msg">
+        A partir de agora você receberá semanalmente
+        conteúdos sobre soluções de marketing e comunicação 
+        para o seu negócio. 
+    </p>
+    <a href="/cancelamento" id="link-msg-home">
+        Cancelar assinatura ➡️
+    </a>
 </div>
-<footer>
+
+<footer data modal hidden>
     <div id="social-media">
         <!-- Linkedin -->
          
@@ -154,12 +143,45 @@
         renanribeiro.mcsd@gmail.com | CNPJ: 46.215.629/0001-50
     </h3>
     <h3 class="footer-text">
-        <a class="privacidade" href="/privacidade">
-            Política de Privacidade</a> 
+        <a class="privacidade-uso uso" href="/uso">
+            Termo de Uso</a>
+        <a class="privacidade-uso privacidade" href="/privacidade">
+            | Privacidade</a> 
     </h3>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-<script src="script.js"></script>
+
+ <main id="page" data-route="home">
+
+<div class="video-background video-home">
+  <video autoplay muted loop playsinline>
+    <source src="images/video.mp4" type="video/mp4" />
+  </video>
+</div>
+
+<script id="crisp" type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="e40eeabe-75d9-404a-bf4e-19267d188b1d";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+<form id="newsletter" data-modal hidden>
+    <div id="div-newsletter" novalidate>
+        <label id="label-newsletter" for="input-newsletter">Newsletter</label>
+        <input type="email" id="input-newsletter" placeholder="Seu melhor e-mail">
+        <button id="button-newsletter"  type="button">
+        <div id="icon-send">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+                    <path d="M435.62,40.64L35.91,251.06c-14.85,12.4-12.68,35.03,4.05,44.64l127.05,43.54,219.26-204.18-176.4,219.29,180.45,61.76c16.24,3.45,29.85-4.47,33.7-20.6l50.01-329.22c-.13-20.15-19.62-33.59-38.4-25.65Z"/>
+                    <path d="M183.54,439.63c0,1.05,3.55,8.64,4.47,10.15,8.54,13.89,28.91,15.73,40.83,4.94l57.99-52.12-103.29-35.58v72.61Z"/>
+                </svg>
+        </div>
+        </button>
+    </div>
+</form>
+<div class="container-center">
+<img id="logotipo" src="images/logo-branco.webp" alt="Renan Ribeiro - Marketing, Comunicação e Soluções Digitais">
+<h1 id="title">
+    em breve<span id="dots"></span>
+</h1>
+</div>
+
+<script id="confetes" src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</main>
 </body>
 </html>

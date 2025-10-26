@@ -1,5 +1,46 @@
 @media (max-width: 768px) {
-    body{
+
+    /* INIT BASE */  /* INIT BASE */ /* INIT BASE */ /* INIT BASE */
+    /* INIT BASE */ /* INIT BASE */ /* INIT BASE */ /* INIT BASE */
+    /* INIT BASE */ /* INIT BASE */ /* INIT BASE */ /* INIT BASE */ 
+    /* INIT BASE */ /* INIT BASE */ /* INIT BASE */ /* INIT BASE */
+
+    .modal-msg{
+        width: 280px;
+        height: 400px;
+        gap: 30px;
+        text-align: center;
+    }
+
+    .title-msg{
+        margin-top: 30px;
+    }
+
+    .body-text-msg{
+        font-size: 12pt;
+    }
+
+    .fechar-msg{
+        font-size: 16pt;
+        width: 40px;
+        height: 40px;
+    }
+
+    .eye{
+        width: 40px;
+    }
+
+    .eye:hover {
+    opacity: 1;
+    }
+
+    /* INIT HOME */ /* INIT HOME */ /* INIT HOME */ /* INIT HOME */
+    /* INIT HOME */ /* INIT HOME */ /* INIT HOME */ /* INIT HOME */
+    /* INIT HOME */ /* INIT HOME */ /* INIT HOME */ /* INIT HOME */
+    /* INIT HOME */ /* INIT HOME */ /* INIT HOME */ /* INIT HOME */
+    /* INIT HOME */ /* INIT HOME */ /* INIT HOME */ /* INIT HOME */
+
+    #body-home{
         overflow: hidden;
     }
 
@@ -40,37 +81,8 @@
         margin-right: 5px;
     }
 
-    #modal-msg{
-        width: 380px;
-        height: 400px;
-        gap: 30px;
-        text-align: center;
-    }
-
-    #title-msg{
-        margin-top: 30px;
-    }
-
-    .body-text-msg{
-        font-size: 14pt;
-    }
-
-    #link-msg{
+    #link-msg-home{
         font-size: 12pt;
-    }
-
-    #fechar-msg{
-        font-size: 16pt;
-        width: 40px;
-        height: 40px;
-    }
-
-    #eye{
-        width: 40px;
-    }
-
-    #eye:hover {
-    opacity: 1;
     }
 
     #logotipo{
@@ -151,4 +163,63 @@
     #social-media > a:nth-child(4) .icon-svg { animation-delay: 1s; }
     #social-media > a:nth-child(5) .icon-svg { animation-delay: 1.3s; }
 
+
+
+/* INIT CANCEL */ /* INIT CANCEL */ /* INIT CANCEL */ /* INIT CANCEL */
+/* INIT CANCEL */ /* INIT CANCEL */ /* INIT CANCEL */ /* INIT CANCEL */
+/* INIT CANCEL */ /* INIT CANCEL */ /* INIT CANCEL */ /* INIT CANCEL */
+/* INIT CANCEL */ /* INIT CANCEL */ /* INIT CANCEL */ /* INIT CANCEL */
+
+    #body-cancel{
+        overflow-x: hidden;
+    }
+
+    #link-msg-cancel{
+        font-size: 12pt;
+    }
+
+        .container{
+        padding: 0;
+    }
+
+    .inner-container{
+        width: 140px;
+        margin: 0;
+        padding: 0;
+    }
+
+    #title-cancelamento{
+        font-size: 14pt;
+        letter-spacing: 0.8px;
+        margin-bottom: 20px;
+    }
+
+    #input-cancelamento{
+        width: 240px;
+        height: 45px;
+        font-size: 11pt;
+    }
+    
+    #unsubscribe{
+        width: 38px;
+    }
+
+    #icon-cancelamento{
+        width: 38px;
+    }
+
+
+}
+
+/* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */
+/* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */
+/* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */
+/* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */
+/* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */
+
+@media (max-width: 1200px) {
+    #body-privacidade-uso {
+        overflow-x: hidden;
+        padding: 80px 30px;
+    }
 }
