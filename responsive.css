@@ -84,7 +84,7 @@
 
     footer{
         width: 95%;
-        height: 160px;
+        height: 200px;
         justify-content: center;
         border-radius: 35px 35px 0px 0px;
     }
@@ -92,6 +92,7 @@
     #social-media{
         width: 280px;
         justify-content: space-around;
+        padding-top: 0px;
     }
 
     .button-circle{
@@ -113,11 +114,22 @@
         fill: #dadada;
     }
 
-    #footer-text{
+    .footer-text{
         font-size: 10pt;
-        margin-top: 30px;
+        margin-top: 0;
+        padding-top: 0;
+        
     }
 
+    .title-footer{
+        margin: 0;
+        margin-top: 15px;
+        margin-bottom: 5px;
+        font-weight: 700;
+        
+    }
+
+   
     @keyframes greenPulse {
     0% {
         fill: #dadada;

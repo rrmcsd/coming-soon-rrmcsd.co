@@ -404,7 +404,7 @@ footer{
     padding: 0;
 }
 
-#footer-text{
+.footer-text{
     font-weight: 400;
     font-size: 11pt;
     color: #181818;
