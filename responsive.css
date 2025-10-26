@@ -84,20 +84,15 @@
 
     footer{
         width: 95%;
-        height: 190px;
+        height: 230px;
         justify-content: center;
         border-radius: 35px 35px 0px 0px;
     }
 
     #social-media{
-        width: 280px;
+        width: 250px;
         justify-content: space-around;
         padding-top: 0px;
-    }
-
-    .button-circle{
-        width: 45px;
-        height: 45px;
     }
 
     .icon-svg{
@@ -123,7 +118,7 @@
 
     .title-footer{
         margin: 0;
-        margin-top: 15px;
+        margin-top: 20px;
         margin-bottom: 5px;
         font-weight: 700;
     }

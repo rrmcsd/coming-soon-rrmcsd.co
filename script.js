@@ -193,11 +193,11 @@ function onClickClose() {
 
 // ---- binding/unbinding ----
 function bindDesktop() {
-  eye.addEventListener("mouseenter", onEnter);
+  eye.addEventListener("click", onEnter);
 }
 
 function unbindDesktop() {
-  eye.removeEventListener("mouseenter", onEnter);
+  eye.removeEventListener("click", onEnter);
 }
 
 function bindMobile() {
