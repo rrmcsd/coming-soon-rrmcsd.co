@@ -226,7 +226,6 @@ sendButton.addEventListener("click", async (ev) => {
 
   if (inputNews.value.includes("@") && validateEmail(inputNews.value)) {
     sendButton.disabled = true;
-    sendIcon.style.opacity = "0.6";
 
     const resp = await subscribeLead(inputNews.value);
 
@@ -238,6 +237,7 @@ sendButton.addEventListener("click", async (ev) => {
       setTimeout(() => {
         inputNews.style.display = "none";
         labelNews.style.display = "none";
+        sendIcon.style.display = "block"
         sendIcon.style.marginRight = "3px";
         divNews.style.width = "45px";
         divNews.style.padding = "0px";
@@ -245,7 +245,12 @@ sendButton.addEventListener("click", async (ev) => {
         sendIcon.classList.add("zoom-in-out");
         modalMsgHome.classList.add("fade-bottom-in");
         modalMsgHome.style.display = "flex";
-        setTimeout(() => { divNews.classList.add("fade-bottom-out"); }, 800);
+        setTimeout(() => { 
+        divNews.classList.add("fade-bottom-out");
+        divNews.style.pointerEvents = "none"
+        sendButton.style.pointerEvents = "none"
+        sendIcon.style.pointerEvents = "none" 
+        }, 800);
       }, 400);
     } else {
       // erro de rede
@@ -458,6 +463,7 @@ startFlicker();
     });
 
     divNews.addEventListener("mouseleave", () => {
+      if(modalMsgHome.style.display != "flex"){
       inputNews.value = ""
       labelNews.classList.remove("fade-bottom-out")
       inputNews.classList.remove("fade-bottom-in")
@@ -468,8 +474,9 @@ startFlicker();
         labelNews.style.display = "block"
         sendButton.style.pointerEvents = "none"
       }, 450);
-    })
-  }
+      };
+    });
+  };
 
   function runDesktopOnly() {
   inputNews.addEventListener("focus", () => {
@@ -484,7 +491,7 @@ startFlicker();
     }, 450);
   });
 
-  // BLUR: só traz o label de volta se o foco NÃO foi para o botão
+// BLUR: só traz o label de volta se o foco NÃO foi para o botão
   inputNews.addEventListener("focusout", (e) => {
     // se o foco foi para o botão (ou algo dentro dele), não faz nada
     const to = e.relatedTarget;
@@ -503,8 +510,7 @@ startFlicker();
       labelNews.style.display = "inline-block";
     }, 450);
   });
-
-  }
+  };
 
   function applyHooks(){
     if (mqMobile.matches) runMobileOnly();
