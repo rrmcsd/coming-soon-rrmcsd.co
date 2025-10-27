@@ -348,10 +348,20 @@ input::placeholder {
 }
 
 #logotipo{
-    width: 160px;
+    width: 300px;
     display: block;
+    align-self: center;
+    margin-top: -20px;
+    z-index: +1;
+    
+}
+
+#eye-3d{
     margin-top: -80px;
     align-self: center;
+    width: 180px;
+    height: 180px;
+    
     
 }
 

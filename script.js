@@ -16,19 +16,6 @@ function on(el, type, fn, opts){
   addTeardown(() => el.removeEventListener(type, fn, opts));
 }
 
-document.addEventListener('turbo:before-render', (e) => {
-  const oldEl = document.getElementById('eye-layer');
-  const newEl = e.detail.newBody.querySelector('#eye-layer');
-  console.log('[turbo] preserva eye-layer?', !!(oldEl && newEl));
-});
-
-document.addEventListener('turbo:before-visit', (e) => {
-  console.log('[turbo] visitando', e.detail.url);
-});
-document.addEventListener('turbo:load', () => {
-  console.log('[turbo] load (sem reload completo)');
-});
-
 // === Apps Script Web App ===
 const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbxoZ_hbG0TaltuSjv9CpxvVvykrpBsCyZ-44f03bTEs9O2DVUaA75SWBMUNMhgzff3n/exec";
 const API_KEY = "MINHA_CHAVE_SECRETA_RRMCSD_2025_!@#F3q8x";
@@ -41,12 +28,12 @@ function validateEmail(email) {
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("particleCanvas");
   if (!canvas) {
-    console.error("Canvas element not found!");
+    
     return;
   }
   const ctx = canvas.getContext("2d");
   if (!ctx) {
-    console.error("Could not get 2D context!");
+    
     return;
   }
 
@@ -541,6 +528,7 @@ const cancelButton = document.getElementById("unsubscribe")
 const inputCancel = document.getElementById("input-cancelamento")
 const modalMsgCancel = document.getElementById("modal-msg-cancel")
 const fecharMsgCancel = document.getElementById("fechar-msg-cancel")
+
 
 // função genérica
 async function unsubscribeLead(email) {
