@@ -33,7 +33,7 @@
   <link rel="stylesheet" href="/style.css" data-turbo-track="reload">
   <link rel="stylesheet" href="/responsive.css" data-turbo-track="reload">
   <script src="/script.js" defer data-turbo-track="reload"></script>
-  <script type="module" src="https://unpkg.com/@google/model-viewer@3.4.0/dist/model-viewer.min.js" defer></script>
+
   <!-- ===== Preloads ===== -->
   <link rel="preload" as="image" href="/images/eye.gif">
 
@@ -181,12 +181,15 @@
   src="images/eye-3d.glb"
   alt="Olho 3D"
   camera-controls
+  disable-zoom
+  disable-tap
+  disable-pan
   auto-rotate-delay="1"
   exposure="1"
   environment-image="neutral"
   tone-mapping="neutral"
   camera-orbit="-100deg 90deg 180m"
-  field-of-view="30deg"
+  field-of-view="29deg"
   max-camera-orbit="-60deg 120deg"
   min-camera-orbit="-120deg 60deg"
   shadow-intensity="2"
@@ -200,7 +203,7 @@
     em breve<span id="dots"></span>
 </h1>
 </div>
-
+ <script type="module" src="https://unpkg.com/@google/model-viewer@3.4.0/dist/model-viewer.min.js" defer></script>
 <script id="confetes" src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </main>
 </body>

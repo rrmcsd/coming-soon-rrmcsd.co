@@ -1,22 +1,19 @@
-
-// INIT BASE // INIT BASE // INIT BASE // INIT BASE
-// INIT BASE // INIT BASE // INIT BASE // INIT BASE 
-// INIT BASE // INIT BASE // INIT BASE // INIT BASE
-// INIT BASE // INIT BASE // INIT BASE // INIT BASE
-
-// --- lifecycle helpers (cole perto do topo) ---
+// === TURBO-SAFE CORE =========================================================
+// helpers de ciclo de vida (iguais aos seus, mas usados de verdade agora)
 let __teardowns = [];
 function addTeardown(fn){ __teardowns.push(fn); }
 function cleanup(){
   __teardowns.forEach(fn => { try { fn(); } catch(_){} });
   __teardowns = [];
 }
+
+// util: bind com teardown automático
 function on(el, type, fn, opts){
   el.addEventListener(type, fn, opts);
   addTeardown(() => el.removeEventListener(type, fn, opts));
 }
 
-// === Apps Script Web App ===
+// === Apps Script Web App (sem mudanças) ======================================
 const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbxoZ_hbG0TaltuSjv9CpxvVvykrpBsCyZ-44f03bTEs9O2DVUaA75SWBMUNMhgzff3n/exec";
 const API_KEY = "MINHA_CHAVE_SECRETA_RRMCSD_2025_!@#F3q8x";
 
@@ -25,103 +22,110 @@ function validateEmail(email) {
   return emailRegex.test(email);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const canvas = document.getElementById("particleCanvas");
-  if (!canvas) {
-    
-    return;
-  }
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    
-    return;
+// === NORMALIZA ELEMENTOS PERMANENTES ========================================
+// Cuidado: #eye-layer é data-turbo-permanent; precisamos garantir estado neutro
+function normalizeEyeLayerForRoute(){
+  const eyeLayer = document.getElementById("eye-layer");
+  if(!eyeLayer) return;
+
+  // se estamos na home, GARANTA que NÃO existe o link wrapper
+  if (document.body.id === 'body-home') {
+    const link = eyeLayer.querySelector('#eye-link');
+    if (link) {
+      const img = link.querySelector('.eye');
+      if (img) eyeLayer.appendChild(img);
+      link.remove();
+    }
   }
 
+  // se estamos nas páginas secundárias, opcionalmente tornar clicável
+  const shouldLinkToHome = ["/privacidade","/uso","/cancelamento","/privacidade/","/uso/","/cancelamento/"]
+    .includes(window.location.pathname);
+  const imgEye = eyeLayer.querySelector('.eye');
+
+  if (shouldLinkToHome && imgEye && !eyeLayer.querySelector('#eye-link')) {
+    const a = document.createElement('a');
+    a.id = 'eye-link';
+    a.href = '/';
+    a.style.cursor = 'pointer';
+    eyeLayer.appendChild(a);
+    a.appendChild(imgEye);
+
+    // IMPORTANTE: ao clicar, antes do Turbo ir pra home, remova o link
+    // pra não “levar” esse estado pra próxima rota snapshot
+    const removeOnClick = () => {
+      const img = a.querySelector('.eye');
+      if (img) eyeLayer.appendChild(img);
+      a.remove();
+    };
+    on(a, 'click', removeOnClick, { once: true });
+  }
+}
+
+// === MÓDULO: partículas do modal (Home) =====================================
+function initParticlesOnCanvas(){
+  const canvas = document.getElementById("particleCanvas");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  let rafId = null;
   let particlesArray = [];
   const particleColor = "#18181885";
   const particleRadius = 1.5;
 
-  const mouse = {
-    x: undefined,
-    y: undefined,
-    radius: 100
-  };
+  const mouse = { x: undefined, y: undefined, radius: 100 };
 
-  window.addEventListener("mousemove", (event) => {
-    mouse.x = event.clientX;
-    mouse.y = event.clientY;
-  });
+  const onMove = (e) => { mouse.x = e.clientX; mouse.y = e.clientY; };
+  const onOut  = () => { mouse.x = mouse.y = undefined; };
+  on(window, 'mousemove', onMove);
+  on(window, 'mouseout', onOut);
 
-  window.addEventListener("mouseout", () => {
-    mouse.x = undefined;
-    mouse.y = undefined;
-  });
+  function calculateParticleCount() {
+    const area = window.innerWidth * window.innerHeight;
+    const calculatedCount = Math.floor(area / 3500);
+    return Math.max(80, Math.min(350, calculatedCount));
+  }
 
   class Particle {
     constructor(x, y) {
-      this.x = x;
-      this.y = y;
-      this.baseX = this.x;
-      this.baseY = this.y;
+      this.x = x; this.y = y;
+      this.baseX = x; this.baseY = y;
       this.density = Math.random() * 15 + 5;
-      this.size = particleRadius;
-      this.color = particleColor;
+      this.size = particleRadius; this.color = particleColor;
       this.driftVx = (Math.random() - 0.5) * 0.15;
       this.driftVy = (Math.random() - 0.5) * 0.15;
-      this.vx = this.driftVx;
-      this.vy = this.driftVy;
+      this.vx = this.driftVx; this.vy = this.driftVy;
     }
-
     draw() {
       ctx.fillStyle = this.color;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.closePath();
-      ctx.fill();
+      ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.closePath(); ctx.fill();
     }
-
     update() {
-      this.baseX += this.driftVx;
-      this.baseY += this.driftVy;
+      this.baseX += this.driftVx; this.baseY += this.driftVy;
+      if (this.baseX <= 0 || this.baseX >= canvas.width) this.driftVx *= -1;
+      if (this.baseY <= 0 || this.baseY >= canvas.height) this.driftVy *= -1;
 
-      if (this.baseX <= 0 || this.baseX >= canvas.width) {
-        this.driftVx *= -1;
-        this.baseX += this.driftVx * 2;
-      }
-      if (this.baseY <= 0 || this.baseY >= canvas.height) {
-        this.driftVy *= -1;
-        this.baseY += this.driftVy * 2;
-      }
-
-      let repulsionForceX = 0;
-      let repulsionForceY = 0;
-      let isMouseActive = mouse.x !== undefined && mouse.y !== undefined;
-
-      if (isMouseActive) {
-        let dx = mouse.x - this.x;
-        let dy = mouse.y - this.y;
-        let distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < mouse.radius) {
-          const force = (mouse.radius - distance) / mouse.radius;
-          const angle = Math.atan2(dy, dx);
-          repulsionForceX = -Math.cos(angle) * force * this.density * 0.3;
-          repulsionForceY = -Math.sin(angle) * force * this.density * 0.3;
+      let rfx=0, rfy=0;
+      if (mouse.x !== undefined && mouse.y !== undefined) {
+        const dx = mouse.x - this.x, dy = mouse.y - this.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < mouse.radius) {
+          const force = (mouse.radius - dist) / mouse.radius;
+          const ang = Math.atan2(dy, dx);
+          rfx = -Math.cos(ang) * force * this.density * 0.3;
+          rfy = -Math.sin(ang) * force * this.density * 0.3;
         }
       }
-
-      const returnSpeed = 0.08;
-      let returnForceX = (this.baseX - this.x) * returnSpeed;
-      let returnForceY = (this.baseY - this.y) * returnSpeed;
-
-      this.vx = returnForceX + repulsionForceX + this.driftVx;
-      this.vy = returnForceY + repulsionForceY + this.driftVy;
-
-      this.x += this.vx;
-      this.y += this.vy;
-
-      this.x = Math.max(this.size, Math.min(canvas.width - this.size, this.x));
-      this.y = Math.max(this.size, Math.min(canvas.height - this.size, this.y));
+      const ret = 0.08;
+      const rtx = (this.baseX - this.x) * ret;
+      const rty = (this.baseY - this.y) * ret;
+      this.vx = rtx + rfx + this.driftVx;
+      this.vy = rty + rfy + this.driftVy;
+      this.x = Math.max(this.size, Math.min(canvas.width - this.size, this.x + this.vx));
+      this.y = Math.max(this.size, Math.min(canvas.height - this.size, this.y + this.vy));
     }
   }
 
@@ -130,546 +134,391 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     const count = calculateParticleCount();
-
     for (let i = 0; i < count; i++) {
-      let x = Math.random() * canvas.width;
-      let y = Math.random() * canvas.height;
-      particlesArray.push(new Particle(x, y));
+      particlesArray.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height));
     }
-  }
-
-  function calculateParticleCount() {
-    const area = window.innerWidth * window.innerHeight;
-
-    const calculatedCount = Math.floor(area / 3500);
-    return Math.max(80, Math.min(350, calculatedCount));
   }
 
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < particlesArray.length; i++) {
-      if (particlesArray[i]) {
-        // Basic check
-        particlesArray[i].update();
-        particlesArray[i].draw();
-      }
-    }
-    requestAnimationFrame(animate);
+    for (let i=0;i<particlesArray.length;i++){ particlesArray[i].update(); particlesArray[i].draw(); }
+    rafId = requestAnimationFrame(animate);
   }
 
-  let resizeTimeout;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-      init();
-    }, 250);
-  });
-
-  init();
-  animate();
-});
-
-
-// INIT HOME // INIT HOME // INIT HOME // INIT HOME 
-// INIT HOME // INIT HOME // INIT HOME // INIT HOME 
-// INIT HOME // INIT HOME // INIT HOME // INIT HOME 
-// INIT HOME // INIT HOME // INIT HOME // INIT HOME 
-
-if (document.querySelector('#body-home')) {
-
-const modalSolutions = document.getElementById("modal-solutions")
-const buttonFechar = document.getElementById("fechar-modal")
-const eye = document.querySelector(".eye");
-const textModal = document.getElementById("text-modal");
-const FADE_OUT_DURATION = 500; // deve bater com o CSS da animação
-const labelNews = document.getElementById("label-newsletter")
-const inputNews = document.getElementById("input-newsletter")
-const sendIcon = document.getElementById("icon-send")
-const sendButton = document.getElementById("button-newsletter")
-const divNews = document.getElementById("div-newsletter")
-const modalMsgHome = document.getElementById("modal-msg-home")
-const fecharMsgHome = document.getElementById("fechar-msg-home")
-let focusTO = null, blurTO = null;
-let showTimeout;
-const SHOW_DELAY = 200;   // ms
-
-// Envia sem ler resposta (evita erro de CORS no console)
-async function subscribeLead(email, nome = "") {
-  const payload = {
-    key: API_KEY,
-    email: String(email || "").trim().toLowerCase(),
-    nome: String(nome || "").trim(),
-    source: "rrmcsd-coming-soon",
-    userAgent: navigator.userAgent
+  let resizeTO;
+  const onResize = () => {
+    clearTimeout(resizeTO);
+    resizeTO = setTimeout(init, 250);
   };
+  on(window, "resize", onResize);
 
-  try {
-    // não defina Content-Type; use no-cors; keepalive ajuda ao fechar a aba rápido
-    await fetch(APPSCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      keepalive: true,
-      body: JSON.stringify(payload)
-    });
-    return { ok: true, opaque: true }; // não há leitura do JSON de volta
-  } catch (e) {
-    return { ok: false, error: String(e) };
-  }
+  init(); animate();
+
+  // teardown deste módulo
+  addTeardown(() => {
+    if (rafId) cancelAnimationFrame(rafId);
+  });
 }
 
-// Se estiver usando <form>, garanta que o botão NÃO submeta:
-const form = document.getElementById("newsletter");
-if (form) form.addEventListener("submit", e => e.preventDefault());
+// === MÓDULO: Home (modal + newsletter + flicker) ============================
+function initHome(){
+  if (document.body.id !== 'body-home') return;
 
-sendButton.addEventListener("click", async (ev) => {
-  ev?.preventDefault?.();
+  // elementos
+  const modalSolutions = document.getElementById("modal-solutions");
+  const buttonFechar   = document.getElementById("fechar-modal");
+  const eyeImg         = document.querySelector(".eye");
+  const textModal      = document.getElementById("text-modal");
+  const labelNews      = document.getElementById("label-newsletter");
+  const inputNews      = document.getElementById("input-newsletter");
+  const sendIcon       = document.getElementById("icon-send");
+  const sendButton     = document.getElementById("button-newsletter");
+  const divNews        = document.getElementById("div-newsletter");
+  const modalMsgHome   = document.getElementById("modal-msg-home");
+  const fecharMsgHome  = document.getElementById("fechar-msg-home");
 
-  if (inputNews.value.includes("@") && validateEmail(inputNews.value)) {
-    sendButton.disabled = true;
+  const FADE_OUT_DURATION = 500;
+  const SHOW_DELAY = 200;
+  let showTimeout, focusTO, blurTO;
+  let flickerTO;
 
-    const resp = await subscribeLead(inputNews.value);
+  // Partículas do canvas dentro do modal
+  initParticlesOnCanvas();
 
-    if (resp.ok) {
-      // === sua UX atual de sucesso ===
-      inputNews.classList.add("fade-bottom-out");
-      startConfetti();
+  // Confetti lazy (garante existir)
+  const ensureConfetti = () => {
+    return new Promise(res => {
+      if (window.confetti) return res();
+      const s = document.getElementById('confetes');
+      if (s) {
+        // espera carregar
+        if (s.dataset.ready) return res();
+        s.addEventListener('load', () => { s.dataset.ready = '1'; res(); }, { once: true });
+      } else res();
+    });
+  };
 
-      setTimeout(() => {
-        inputNews.style.display = "none";
-        labelNews.style.display = "none";
-        sendIcon.style.display = "block"
-        sendIcon.style.marginRight = "3px";
-        divNews.style.width = "45px";
-        divNews.style.padding = "0px";
-        divNews.classList.add("color-loop");
-        sendIcon.classList.add("zoom-in-out");
-        modalMsgHome.classList.add("fade-bottom-in");
-        modalMsgHome.style.display = "flex";
-        setTimeout(() => { 
-        divNews.classList.add("fade-bottom-out");
-        divNews.style.pointerEvents = "none"
-        sendButton.style.pointerEvents = "none"
-        sendIcon.style.pointerEvents = "none" 
-        }, 800);
-      }, 400);
+  async function subscribeLead(email, nome = "") {
+    const payload = { key: API_KEY, email: String(email||"").trim().toLowerCase(), nome: String(nome||"").trim(), source: "rrmcsd-coming-soon", userAgent: navigator.userAgent };
+    try {
+      await fetch(APPSCRIPT_URL, { method: "POST", mode: "no-cors", keepalive: true, body: JSON.stringify(payload) });
+      return { ok: true, opaque: true };
+    } catch (e) { return { ok: false, error: String(e) }; }
+  }
+
+  const form = document.getElementById("newsletter");
+  if (form) on(form, "submit", e => e.preventDefault());
+
+  const onSend = async (ev) => {
+    ev?.preventDefault?.();
+    if (inputNews.value.includes("@") && validateEmail(inputNews.value)) {
+      sendButton.disabled = true;
+      const resp = await subscribeLead(inputNews.value);
+
+      if (resp.ok) {
+        inputNews.classList.add("fade-bottom-out");
+        await ensureConfetti();
+        if (window.confetti){
+          const end = Date.now() + 500;
+          const frame = () => {
+            window.confetti({ particleCount: 5, angle: 60, spread: 100, origin: {x:0}, colors: ['#dadada','#176b39','#a3fc83'] });
+            window.confetti({ particleCount: 5, angle:120, spread: 100, origin: {x:1}, colors: ['#dadada','#176b39','#a3fc83'] });
+            if (Date.now() < end) requestAnimationFrame(frame);
+          }; frame();
+        }
+        setTimeout(() => {
+          inputNews.style.display = "none";
+          labelNews.style.display = "none";
+          sendIcon.style.display  = "block";
+          sendIcon.style.marginRight = "3px";
+          divNews.style.width = "45px"; divNews.style.padding = "0px";
+          divNews.classList.add("color-loop");
+          sendIcon.classList.add("zoom-in-out");
+          modalMsgHome.classList.add("fade-bottom-in");
+          modalMsgHome.style.display = "flex";
+          setTimeout(() => {
+            divNews.classList.add("fade-bottom-out");
+            divNews.style.pointerEvents = "none";
+            sendButton.style.pointerEvents = "none";
+            sendIcon.style.pointerEvents = "none";
+          }, 800);
+        }, 400);
+      } else {
+        inputNews.value = "";
+        inputNews.style.border = "solid 2px #ed3e3eff";
+      }
+      sendButton.disabled = false;
+      sendIcon.style.opacity = "1";
     } else {
-      // erro de rede
       inputNews.value = "";
       inputNews.style.border = "solid 2px #ed3e3eff";
     }
+  };
+  on(sendButton, "click", onSend);
 
-    sendButton.disabled = false;
-    sendIcon.style.opacity = "1";
-  } else {
-    inputNews.value = "";
-    inputNews.style.border = "solid 2px #ed3e3eff";
+  const onCloseMsg = () => {
+    modalMsgHome.classList.remove("fade-bottom-in");
+    modalMsgHome.classList.add("fade-bottom-out");
+    setTimeout(() => { modalMsgHome.style.display = "none"; }, 1000);
+  };
+  on(fecharMsgHome, "click", onCloseMsg);
+
+  function showModal() {
+    if (!modalSolutions || !eyeImg) return;
+    modalSolutions.classList.remove("fade-out-modal");
+    modalSolutions.classList.add("fade-in-modal");
+    modalSolutions.style.display = "flex";
+    eyeImg.style.opacity = "0";
+    if (window.$crisp) { $crisp.push(["do", "chat:hide"]); }
   }
-});
-
-fecharMsgHome.addEventListener("click", () => {
-  modalMsgHome.classList.remove("fade-bottom-in")
-  modalMsgHome.classList.add("fade-bottom-out")
-  setTimeout(() => {
-    modalMsgHome.style.display = "none"
-  }, 1000);
-})
-
- // Função da animação de confete
-  function startConfetti() {
-    const duration = 500;
-    const end = Date.now() + duration;
-
-    function frame() {
-      confetti({
-        particleCount: 5,
-        angle: 60,
-        spread: 100,
-        origin: { x: 0 },
-        colors: ['#dadada', '#176b39', '#a3fc83'],
-        drift: 0.0
-      });
-
-      confetti({
-        particleCount: 5,
-        angle: 120,
-        spread: 100,
-        origin: { x: 1 },
-        colors: ['#dadada', '#176b39', '#a3fc83'],
-        drift: 0.0
-      });
-
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
+  function hideModal() {
+    if (!modalSolutions || !eyeImg) return;
+    modalSolutions.classList.remove("fade-in-modal");
+    modalSolutions.classList.add("fade-out-modal");
+    setTimeout(() => {
+      if (modalSolutions.classList.contains("fade-out-modal")) {
+        modalSolutions.style.display = "none";
+        eyeImg.style.opacity = "1";
+        if (window.$crisp) { $crisp.push(["do", "chat:show"]); }
       }
-    }
-
-    frame();
+    }, FADE_OUT_DURATION);
   }
 
-function textAnimation() {
-  const dots = document.getElementById("dots");
-  const states = ["", ".", "..", "..."];
-  let index = 0;
+  const mqMobile = window.matchMedia("(max-width: 768px)");
+  const onEnter = () => { clearTimeout(showTimeout); showTimeout = setTimeout(showModal, 200); };
+  const onClickOpen = () => { clearTimeout(showTimeout); showTimeout = setTimeout(showModal, 200); };
+  const onClickClose = () => hideModal();
 
-  setInterval(() => {
-    dots.style.opacity = 0; // fade out
-
-    setTimeout(() => {
-      dots.textContent = states[index];
-      dots.style.opacity = 1; // fade in
-      index = (index + 1) % states.length;
-    }, 400); // combina com o transition do CSS
-  }, 800);
-}
-
-textAnimation();
-
-function showModal() {
-  modalSolutions.classList.remove("fade-out-modal");
-  modalSolutions.classList.add("fade-in-modal");
-  modalSolutions.style.display = "flex";
-  eye.style.opacity = "0"
-  if (window.$crisp) {
-    $crisp.push(["do", "chat:hide"]);
+  function bindDesktop() {
+    if (eyeImg) on(eyeImg, "click", onEnter);
   }
-}
-
-function hideModal() {
-  modalSolutions.classList.remove("fade-in-modal");
-  modalSolutions.classList.add("fade-out-modal");
-
-  // esconde após o fim do fade-out
-  setTimeout(() => {
-    if (modalSolutions.classList.contains("fade-out-modal")) {
-      modalSolutions.style.display = "none";
-      eye.style.opacity = "1"
-        if (window.$crisp) {
-          $crisp.push(["do", "chat:show"]);
-        }
-    }
-  }, FADE_OUT_DURATION);
-}
-
-// ---- handlers (desktop) ----
-function onEnter() {
-  clearTimeout(showTimeout);
-  showTimeout = setTimeout(showModal, SHOW_DELAY);
-}
-
-// ---- handlers (mobile) ----
-function onClickOpen() {
-  clearTimeout(showTimeout);
-  showTimeout = setTimeout(showModal, SHOW_DELAY);
-}
-
-function onClickClose() {
-  hideModal();
-}
-
-// ---- binding/unbinding ----
-function bindDesktop() {
-  eye.addEventListener("click", onEnter);
-}
-
-function unbindDesktop() {
-  eye.removeEventListener("click", onEnter);
-}
-
-function bindMobile() {
-  eye.addEventListener("click", onClickOpen);
-  buttonFechar?.addEventListener("click", onClickClose);
-}
-
-function unbindMobile() {
-  eye.removeEventListener("click", onClickOpen);
-  buttonFechar?.removeEventListener("click", onClickClose);
-}
-
-// ---- aplicar conforme largura ----
-const mqMobile = window.matchMedia("(max-width: 768px)");
-
-function applyBindings() {
-  clearTimeout(showTimeout);
-
-  if (mqMobile.matches) {
-    // MOBILE: click abre / botão fecha
-    unbindDesktop();
-    bindMobile();
-  } else {
-    // DESKTOP: hover abre / botão fecha
-    unbindMobile();
-    bindDesktop();
-    buttonFechar?.addEventListener("click", onClickClose);
-  }
-}
-
-applyBindings();
-mqMobile.addEventListener("change", applyBindings);
-
-// Constrói HTML preservando quebras e espaços
-textModal.innerHTML = textModal.textContent
-  .split("")
-  .map(char => {
-    if (char === "\n") return "<br>";
-    if (char === " ")  return `<span class="space">&nbsp;</span>`; // espaço preservado
-    return `<span class="char">${char}</span>`;                    // letra normal
-  })
-  .join("");
-
-// Selecione apenas letras (ignora .space)
-const spans = textModal.querySelectorAll("span.char");
-
-// Função que “apaga” letras aleatórias e as reacende
-function randomFade() {
-  const apagadas = 3;
-
-  // acende tudo
-  spans.forEach(span => (span.style.opacity = 1));
-
-  // escolhe letras aleatórias (somente .char)
-  const indices = new Set();
-  while (indices.size < apagadas) {
-    const i = Math.floor(Math.random() * spans.length);
-    indices.add(i);
+  function bindMobile() {
+    if (eyeImg) on(eyeImg, "click", onClickOpen);
+    if (buttonFechar) on(buttonFechar, "click", onClickClose);
   }
 
-  // aplica opacidade reduzida
-  indices.forEach(i => {
-    spans[i].style.opacity = 0.25 + Math.random() * 0.25; // 0.25–0.5
-  });
-}
+  function applyBindings(){
+    if (mqMobile.matches){ bindMobile(); }
+    else { bindDesktop(); if (buttonFechar) on(buttonFechar, "click", onClickClose); }
+  }
+  applyBindings();
+  on(mqMobile, "change", applyBindings);
 
-// loop orgânico
-function startFlicker() {
-  randomFade();
-  const next = 600 + Math.random() * 1200; // 0.6–1.8s
-  setTimeout(startFlicker, next);
-}
-startFlicker();
+  // animação do título "em breve..."
+  function textAnimation() {
+    const dots = document.getElementById("dots");
+    if(!dots) return;
+    let idx = 0; const states = ["", ".", "..", "..."];
+    const tick = () => {
+      dots.style.opacity = 0;
+      const t1 = setTimeout(() => {
+        dots.textContent = states[idx]; dots.style.opacity = 1;
+        idx = (idx+1) % states.length;
+        flickerTO = setTimeout(tick, 800);
+      }, 400);
+      addTeardown(()=> clearTimeout(t1));
+    };
+    tick();
+  }
+  textAnimation();
 
-(function mobileDesktopHooks(){
-  function runMobileOnly() {
-    divNews.addEventListener("click", () => {
-      labelNews.classList.remove("fade-bottom-in")
-      inputNews.classList.remove("fade-bottom-out")
-      labelNews.classList.add("fade-bottom-out")
-      inputNews.classList.add("fade-bottom-in")
-      setTimeout(() => {
-        sendButton.style.pointerEvents = "all"
-        sendButton.style.display = "block"
-        inputNews.style.display = "block"
-        labelNews.style.display = "none"
-      }, 450);
-    });
+  // texto flicker
+  if (textModal) {
+    textModal.innerHTML = textModal.textContent
+      .split("")
+      .map(c => c === "\n" ? "<br>" : (c === " " ? `<span class="space">&nbsp;</span>` : `<span class="char">${c}</span>`))
+      .join("");
+    const spans = textModal.querySelectorAll("span.char");
+    const flick = () => {
+      spans.forEach(s => s.style.opacity = 1);
+      const indices = new Set();
+      while (indices.size < 3) indices.add(Math.floor(Math.random() * spans.length));
+      indices.forEach(i => spans[i].style.opacity = 0.25 + Math.random()*0.25);
+      flickerTO = setTimeout(flick, 600 + Math.random()*1200);
+    };
+    flick();
+  }
 
-    divNews.addEventListener("mouseleave", () => {
-      if(modalMsgHome.style.display != "flex"){
-      inputNews.value = ""
-      labelNews.classList.remove("fade-bottom-out")
-      inputNews.classList.remove("fade-bottom-in")
-      labelNews.classList.add("fade-bottom-in")
-      inputNews.classList.add("fade-bottom-out")
-      setTimeout(() => {
-        inputNews.style.display = "none"
-        labelNews.style.display = "block"
-        sendButton.style.pointerEvents = "none"
-      }, 450);
+  // hooks mobile/desktop newsletter
+  (function mobileDesktopHooks(){
+    const runMobileOnly = () => {
+      if (!divNews) return;
+      const onOpen = () => {
+        labelNews.classList.remove("fade-bottom-in");
+        inputNews.classList.remove("fade-bottom-out");
+        labelNews.classList.add("fade-bottom-out");
+        inputNews.classList.add("fade-bottom-in");
+        const t = setTimeout(() => {
+          sendButton.style.pointerEvents = "all";
+          sendButton.style.display = "block";
+          inputNews.style.display = "block";
+          labelNews.style.display = "none";
+        }, 450);
+        addTeardown(() => clearTimeout(t));
       };
-    });
-  };
+      const onLeave = () => {
+        if (modalMsgHome.style.display !== "flex"){
+          inputNews.value = "";
+          labelNews.classList.remove("fade-bottom-out");
+          inputNews.classList.remove("fade-bottom-in");
+          labelNews.classList.add("fade-bottom-in");
+          inputNews.classList.add("fade-bottom-out");
+          const t = setTimeout(() => {
+            inputNews.style.display = "none";
+            labelNews.style.display = "block";
+            sendButton.style.pointerEvents = "none";
+          }, 450);
+          addTeardown(() => clearTimeout(t));
+        }
+      };
+      on(divNews, "click", onOpen);
+      on(divNews, "mouseleave", onLeave);
+    };
 
-  function runDesktopOnly() {
-  inputNews.addEventListener("focus", () => {
-    clearTimeout(blurTO);
-    labelNews.classList.remove("fade-bottom-in");
-    labelNews.classList.add("fade-bottom-out");
-    sendButton.classList.add("fade-bottom-in")
-    focusTO = setTimeout(() => {
-      sendButton.style.display = "block"
-      inputNews.style.width = "400px";
-      labelNews.style.display = "none";
-    }, 450);
-  });
+    const runDesktopOnly = () => {
+      if (!inputNews) return;
+      const onFocus = () => {
+        labelNews.classList.remove("fade-bottom-in");
+        labelNews.classList.add("fade-bottom-out");
+        sendButton.classList.add("fade-bottom-in");
+        const t = setTimeout(() => {
+          sendButton.style.display = "block";
+          inputNews.style.width = "400px";
+          labelNews.style.display = "none";
+        }, 450);
+        addTeardown(()=> clearTimeout(t));
+      };
+      const onBlur = (e) => {
+        const to = e.relatedTarget;
+        if (to && (to === sendButton || sendButton.contains(to))) return;
+        inputNews.value = "";
+        inputNews.style.border = "solid 2px #181818";
+        sendButton.classList.remove("fade-bottom-in");
+        sendButton.classList.add("fade-bottom-out");
+        labelNews.classList.remove("fade-bottom-out");
+        labelNews.classList.add("fade-bottom-in");
+        const t = setTimeout(() => {
+          sendButton.style.display = "none";
+          inputNews.style.width = "300px";
+          labelNews.style.display = "inline-block";
+        }, 450);
+        addTeardown(()=> clearTimeout(t));
+      };
+      on(inputNews, "focus", onFocus);
+      on(inputNews, "focusout", onBlur);
+    };
 
-// BLUR: só traz o label de volta se o foco NÃO foi para o botão
-  inputNews.addEventListener("focusout", (e) => {
-    // se o foco foi para o botão (ou algo dentro dele), não faz nada
-    const to = e.relatedTarget;
-    if (to && (to === sendButton || sendButton.contains(to))) return;
+    const apply = () => (window.matchMedia("(max-width: 768px)").matches ? runMobileOnly() : runDesktopOnly());
+    apply();
+    on(window.matchMedia("(max-width: 768px)"), "change", apply);
+  })();
 
-    clearTimeout(focusTO);
-    inputNews.value = ""
-    inputNews.style.border = "solid 2px #181818"
-    sendButton.classList.remove("fade-bottom-in")
-    sendButton.classList.add("fade-bottom-out")
-    labelNews.classList.remove("fade-bottom-out");
-    labelNews.classList.add("fade-bottom-in");
-    blurTO = setTimeout(() => {
-      sendButton.style.display = "none"
-      inputNews.style.width = "300px";
+  // teardown específico da Home para estados transitórios
+  addTeardown(() => {
+    clearTimeout(showTimeout);
+    clearTimeout(flickerTO);
+    // reseta mini UI do newsletter se necessário, evitando “snapshot sujo”
+    if (labelNews && inputNews && sendButton && sendIcon && divNews) {
       labelNews.style.display = "inline-block";
-    }, 450);
+      inputNews.style.display = "none";
+      inputNews.value = "";
+      inputNews.style.width = "300px";
+      sendButton.style.display = "none";
+      divNews.classList.remove("color-loop","fade-bottom-out");
+      sendIcon.classList.remove("zoom-in-out");
+    }
   });
-  };
-
-  function applyHooks(){
-    if (mqMobile.matches) runMobileOnly();
-    else runDesktopOnly();
-  }
-
-  applyHooks();
-  mqMobile.addEventListener("change", applyHooks);
-})();
-
 }
 
-// INIT CANCEL // INIT CANCEL // INIT CANCEL // INIT CANCEL 
-// INIT CANCEL // INIT CANCEL // INIT CANCEL // INIT CANCEL 
-// INIT CANCEL // INIT CANCEL // INIT CANCEL // INIT CANCEL 
-// INIT CANCEL // INIT CANCEL // INIT CANCEL // INIT CANCEL 
+// === MÓDULO: Cancel (mantém sua lógica; apenas turbo-safe) ===================
+function initCancel(){
+  if (document.body.id !== 'body-cancel') return;
 
-if (document.querySelector('#body-cancel')) {
+  const cancelButton  = document.getElementById("unsubscribe");
+  const inputCancel   = document.getElementById("input-cancelamento");
+  const modalMsgCancel= document.getElementById("modal-msg-cancel");
+  const fecharMsgCancel = document.getElementById("fechar-msg-cancel");
+  const eyes = document.querySelectorAll(".eyes-cancel");
 
-const cancelButton = document.getElementById("unsubscribe")
-const inputCancel = document.getElementById("input-cancelamento")
-const modalMsgCancel = document.getElementById("modal-msg-cancel")
-const fecharMsgCancel = document.getElementById("fechar-msg-cancel")
-
-
-// função genérica
-async function unsubscribeLead(email) {
-  const payload = {
-    key: API_KEY,
-    action: "unsubscribe",
-    email: String(email || "").trim().toLowerCase(),
-    userAgent: navigator.userAgent,
-  };
-
-  try {
-    await fetch(APPSCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      keepalive: true,
-      body: JSON.stringify(payload),
-    });
-    return { ok: true };
-  } catch (err) {
-    return { ok: false, error: err };
+  async function unsubscribeLead(email) {
+    const payload = { key: API_KEY, action: "unsubscribe", email: String(email||"").trim().toLowerCase(), userAgent: navigator.userAgent };
+    try {
+      await fetch(APPSCRIPT_URL, { method: "POST", mode:"no-cors", keepalive:true, body: JSON.stringify(payload) });
+      return { ok:true };
+    } catch(err){ return { ok:false, error:err }; }
   }
-}
 
-cancelButton.addEventListener("click", async () => {
-  if (inputCancel.value.includes("@") && validateEmail(inputCancel.value)) {
-    await unsubscribeLead(inputCancel.value);
-
-    // UX igual ao subscribe
-    setTimeout(() => {
-      modalMsgCancel.classList.add("fade-bottom-in");
-      modalMsgCancel.style.display = "flex";
+  const onClickUnsub = async () => {
+    if (inputCancel.value.includes("@") && validateEmail(inputCancel.value)) {
+      await unsubscribeLead(inputCancel.value);
+      const t = setTimeout(() => {
+        modalMsgCancel.classList.add("fade-bottom-in");
+        modalMsgCancel.style.display = "flex";
+        inputCancel.value = "";
+      }, 400);
+      addTeardown(() => clearTimeout(t));
+    } else {
       inputCancel.value = "";
-    }, 400);
-  } else {
-    inputCancel.value = "";
-    inputCancel.style.border = "solid 2px #ed3e3eff";
-  }
-});
-
-fecharMsgCancel.addEventListener("click", () => {
-  modalMsgCancel.classList.remove("fade-bottom-in")
-  modalMsgCancel.classList.add("fade-bottom-out")
-  setTimeout(() => {
-    modalMsgCancel.style.display = "none"
-  }, 1000);
-})
-
-inputCancel.addEventListener("click", () => {
-    inputCancel.value = ""
-    inputCancel.style.border = "solid 2px #176b39"
-})
-
-var windowWidth = window.innerWidth;
-var windowHeight = window.innerHeight;
-
-function setWindowSize() {
-    windowWidth = window.innerWidth;
-    windowHeight = window.innerHeight;
-};
-window.addEventListener('resize', setWindowSize);
-
-var eyes = document.querySelectorAll(".eyes-cancel");
-var cursorPos = { x: 0, y: 0 };
-
-window.addEventListener("mousemove", mousemove);
-window.addEventListener("touchmove", touchmove);
-
-function mousemove(e) {
-  cursorPos = {
-    x: e.clientX,
-    y: e.clientY
-  }; 
-	if (!clicked) {
-	  eyes.forEach(function(el) {
-		  eyeFollow.init(el);
-	  })
-	}
-}
-function touchmove(e) {
-  cursorPos = {
-    x: e.targetTouches[0].offsetX,
-    y: e.targetTouches[0].offsetY
-  }; 
-	if (!clicked) {
-	  eyes.forEach(function(el) {
-		  eyeFollow.init(el);
-	  })
-	}
-}
-
-var eyeFollow = (function() {
-
-	function getOffset(el) {
-  		el = el.getBoundingClientRect();
-		return {
-			x: el.left + window.scrollX,
-			y: el.top + window.scrollY
-		};
-	}
-	
-	function moveEye(eye) {
-		var eyeOffset = getOffset(eye);
-		var bBox = eye.getBBox();
-		var centerX = eyeOffset.x + bBox.width / 2;
-		var centerY = eyeOffset.y + bBox.height / 2;
-		var percentTop = Math.round((cursorPos.y - centerY) * 100 / windowHeight);
-		var percentLeft = Math.round((cursorPos.x - centerX) * 100 / windowWidth);
-		eye.style.transform = `translate(${percentLeft/5}px, ${ percentTop/5}px)`
-	}
-	
-	return {
-    init: (el) => {
-      moveEye(el);
+      inputCancel.style.border = "solid 2px #ed3e3eff";
     }
   };
-})();
+  on(cancelButton, "click", onClickUnsub);
 
-var clicked, cancelled;
-var animate = (function() {
+  on(fecharMsgCancel, "click", () => {
+    modalMsgCancel.classList.remove("fade-bottom-in");
+    modalMsgCancel.classList.add("fade-bottom-out");
+    const t = setTimeout(() => { modalMsgCancel.style.display = "none"; }, 1000);
+    addTeardown(()=> clearTimeout(t));
+  });
 
+  on(inputCancel, "click", () => {
+    inputCancel.value = "";
+    inputCancel.style.border = "solid 2px #176b39";
+  });
 
-	function initAnimations() {
-		clicked = false;
-	}
+  let windowWidth = window.innerWidth;
+  let windowHeight = window.innerHeight;
+  const onResize = () => { windowWidth = window.innerWidth; windowHeight = window.innerHeight; };
+  on(window, "resize", onResize);
 
-	return {
-		init: () => {
-			initAnimations();
-		}
-	};
-})();
+  const getOffset = (el) => {
+    const r = el.getBoundingClientRect();
+    return { x: r.left + window.scrollX, y: r.top + window.scrollY };
+  };
 
-document.addEventListener("DOMContentLoaded", animate.init());
+  const moveEye = (eye, cursor) => {
+    const off = getOffset(eye);
+    const b = eye.getBBox();
+    const cx = off.x + b.width/2;
+    const cy = off.y + b.height/2;
+    const pTop  = Math.round((cursor.y - cy) * 100 / windowHeight);
+    const pLeft = Math.round((cursor.x - cx) * 100 / windowWidth);
+    eye.style.transform = `translate(${pLeft/5}px, ${pTop/5}px)`;
+  };
 
+  const onPointer = (x,y) => eyes.forEach(el => moveEye(el, {x,y}));
 
+  const mm = (e) => onPointer(e.clientX, e.clientY);
+  const tm = (e) => onPointer(e.targetTouches[0].offsetX, e.targetTouches[0].offsetY);
 
+  on(window, "mousemove", mm);
+  on(window, "touchmove", tm);
 }
 
+// === BOOTSTRAP TURBO =========================================================
+// roda em cada visita
+function boot(){
+  cleanup();                  // desmonta restos da rota anterior
+  normalizeEyeLayerForRoute();// acerta #eye-layer conforme a rota
+  initHome();                 // inicializa se for a home
+  initCancel();               // inicializa se for /cancel
+}
+
+// Turbo dispara em cada visita
+document.addEventListener('turbo:load', boot);
+
+// antes do Turbo tirar um snapshot da página atual
+document.addEventListener('turbo:before-cache', () => {
+  // limpe temporários, pare animações, etc.
+  cleanup();
+});
