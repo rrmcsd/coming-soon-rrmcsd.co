@@ -22,46 +22,6 @@ function validateEmail(email) {
   return emailRegex.test(email);
 }
 
-// === NORMALIZA ELEMENTOS PERMANENTES ========================================
-// Cuidado: #eye-layer é data-turbo-permanent; precisamos garantir estado neutro
-function normalizeEyeLayerForRoute(){
-  const eyeLayer = document.getElementById("eye-layer");
-  if(!eyeLayer) return;
-
-  // se estamos na home, GARANTA que NÃO existe o link wrapper
-  if (document.body.id === 'body-home') {
-    const link = eyeLayer.querySelector('#eye-link');
-    if (link) {
-      const img = link.querySelector('.eye');
-      if (img) eyeLayer.appendChild(img);
-      link.remove();
-    }
-  }
-
-  // se estamos nas páginas secundárias, opcionalmente tornar clicável
-  const shouldLinkToHome = ["/privacidade","/uso","/cancelamento","/privacidade/","/uso/","/cancelamento/"]
-    .includes(window.location.pathname);
-  const imgEye = eyeLayer.querySelector('.eye');
-
-  if (shouldLinkToHome && imgEye && !eyeLayer.querySelector('#eye-link')) {
-    const a = document.createElement('a');
-    a.id = 'eye-link';
-    a.href = '/';
-    a.style.cursor = 'pointer';
-    eyeLayer.appendChild(a);
-    a.appendChild(imgEye);
-
-    // IMPORTANTE: ao clicar, antes do Turbo ir pra home, remova o link
-    // pra não “levar” esse estado pra próxima rota snapshot
-    const removeOnClick = () => {
-      const img = a.querySelector('.eye');
-      if (img) eyeLayer.appendChild(img);
-      a.remove();
-    };
-    on(a, 'click', removeOnClick, { once: true });
-  }
-}
-
 // === MÓDULO: partículas do modal (Home) =====================================
 function initParticlesOnCanvas(){
   const canvas = document.getElementById("particleCanvas");
@@ -509,7 +469,6 @@ function initCancel(){
 // roda em cada visita
 function boot(){
   cleanup();                  // desmonta restos da rota anterior
-  normalizeEyeLayerForRoute();// acerta #eye-layer conforme a rota
   initHome();                 // inicializa se for a home
   initCancel();               // inicializa se for /cancel
 }
