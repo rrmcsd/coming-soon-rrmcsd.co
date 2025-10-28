@@ -127,7 +127,7 @@ function initHome(){
   // elementos
   const modalSolutions = document.getElementById("modal-solutions");
   const buttonFechar   = document.getElementById("fechar-modal");
-  const eyeImg         = document.querySelector(".eye");
+  const eyeImg         = document.getElementById("eye-layer");
   const textModal      = document.getElementById("text-modal");
   const labelNews      = document.getElementById("label-newsletter");
   const inputNews      = document.getElementById("input-newsletter");
@@ -136,10 +136,10 @@ function initHome(){
   const divNews        = document.getElementById("div-newsletter");
   const modalMsgHome   = document.getElementById("modal-msg-home");
   const fecharMsgHome  = document.getElementById("fechar-msg-home");
+  const rrmcsdImg      = document.getElementById("rrmcsd-img") 
 
   const FADE_OUT_DURATION = 500;
-  const SHOW_DELAY = 200;
-  let showTimeout, focusTO, blurTO;
+  let showTimeout;
   let flickerTO;
 
   // Partículas do canvas dentro do modal
@@ -177,6 +177,9 @@ function initHome(){
 
       if (resp.ok) {
         inputNews.classList.add("fade-bottom-out");
+        rrmcsdImg.classList.remove("fade-bottom-out")
+        rrmcsdImg.classList.add("fade-bottom-in")
+        rrmcsdImg.style.display = "block"
         await ensureConfetti();
         if (window.confetti){
           const end = Date.now() + 500;
@@ -228,7 +231,6 @@ function initHome(){
     modalSolutions.classList.remove("fade-out-modal");
     modalSolutions.classList.add("fade-in-modal");
     modalSolutions.style.display = "flex";
-    eyeImg.style.opacity = "0";
     if (window.$crisp) { $crisp.push(["do", "chat:hide"]); }
   }
   function hideModal() {
@@ -238,7 +240,6 @@ function initHome(){
     setTimeout(() => {
       if (modalSolutions.classList.contains("fade-out-modal")) {
         modalSolutions.style.display = "none";
-        eyeImg.style.opacity = "1";
         if (window.$crisp) { $crisp.push(["do", "chat:show"]); }
       }
     }, FADE_OUT_DURATION);
@@ -304,8 +305,10 @@ function initHome(){
     const runMobileOnly = () => {
       if (!divNews) return;
       const onOpen = () => {
+        rrmcsdImg.classList.remove("fade-bottom-in")
         labelNews.classList.remove("fade-bottom-in");
         inputNews.classList.remove("fade-bottom-out");
+        rrmcsdImg.classList.add("fade-bottom-out")
         labelNews.classList.add("fade-bottom-out");
         inputNews.classList.add("fade-bottom-in");
         const t = setTimeout(() => {
@@ -313,19 +316,26 @@ function initHome(){
           sendButton.style.display = "block";
           inputNews.style.display = "block";
           labelNews.style.display = "none";
+          rrmcsdImg.style.display = "none"
         }, 450);
         addTeardown(() => clearTimeout(t));
       };
       const onLeave = () => {
         if (modalMsgHome.style.display !== "flex"){
           inputNews.value = "";
+          rrmcsdImg.classList.remove("fade-bottom-out")
           labelNews.classList.remove("fade-bottom-out");
           inputNews.classList.remove("fade-bottom-in");
+
+          rrmcsdImg.classList.add("fade-bottom-in")
           labelNews.classList.add("fade-bottom-in");
           inputNews.classList.add("fade-bottom-out");
           const t = setTimeout(() => {
             inputNews.style.display = "none";
             labelNews.style.display = "block";
+            setTimeout(() => {
+            rrmcsdImg.style.display = "block"
+            }, 300);
             sendButton.style.pointerEvents = "none";
           }, 450);
           addTeardown(() => clearTimeout(t));

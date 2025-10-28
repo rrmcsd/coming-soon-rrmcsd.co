@@ -26,12 +26,18 @@
         height: 40px;
     }
 
-    .eye{
-        width: 40px;
+    #eye-layer{
+        top: 28px;
+        left: 20px;
     }
 
-    .eye:hover {
-    opacity: 1;
+    .eye{
+         width: 30px;
+    }
+
+    #rrmcsd-img{
+        width: 75px;
+        
     }
 
     /* INIT HOME */ /* INIT HOME */ /* INIT HOME */ /* INIT HOME */
