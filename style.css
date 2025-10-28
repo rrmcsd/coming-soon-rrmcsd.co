@@ -902,3 +902,11 @@ footer{
     color: #dadada;
 }
 
+model-viewer {
+    --background-color: transparent; /* Remove o fundo padrão */
+    --progress-bar-color: none;
+    --progress-bar-height: 0px;
+}
+model-viewer::part(default-progress-bar) {
+    display: none;
+}
