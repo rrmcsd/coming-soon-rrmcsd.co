@@ -14,7 +14,7 @@ function on(el, type, fn, opts){
 }
 
 // === Apps Script Web App (sem mudanças) ======================================
-const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbzzpb-FI5o_nx7lafCo3J2863c-v-w5YepSaPNTJItOM_JTA2iYrDH9VHB5_ZoaJnqJ/exec";
+const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVlrBunYH5E0iFbfbgceN25YOKGMN0v-p2xseaRMUTd8F2UikE-pzut94sCvBgIibi/exec";
 const API_KEY = "MINHA_CHAVE_SECRETA_RRMCSD_2025_!@#F3q8x";
 
 function validateEmail(email) {
@@ -169,13 +169,15 @@ async function subscribeLead(email, nome = "") {
   try {
     const resp = await fetch(APPSCRIPT_URL, {
       method: "POST",
-      mode: "cors",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
+
+    // ✅ Retorno direto em JSON
     const json = await resp.json();
     return json;
   } catch (e) {
+    console.error("Erro na inscrição:", e);
     return { ok: false, error: String(e) };
   }
 }
@@ -431,16 +433,19 @@ function initCancel(){
     email: String(email || "").trim().toLowerCase(),
     userAgent: navigator.userAgent
   };
+
   try {
-    await fetch(APPSCRIPT_URL, {
+    const resp = await fetch(APPSCRIPT_URL, {
       method: "POST",
-      mode: "no-cors", // troque para "cors" se configurar CORS no Apps Script
-      keepalive: true,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
-    return { ok: true };
+
+    // ✅ Lê o retorno do servidor (não ignora mais a resposta)
+    const json = await resp.json();
+    return json;
   } catch (err) {
+    console.error("Erro no cancelamento:", err);
     return { ok: false, error: String(err) };
   }
 }
