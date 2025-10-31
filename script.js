@@ -14,7 +14,7 @@ function on(el, type, fn, opts){
 }
 
 // === Apps Script Web App (sem mudanças) ======================================
-const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbxoZ_hbG0TaltuSjv9CpxvVvykrpBsCyZ-44f03bTEs9O2DVUaA75SWBMUNMhgzff3n/exec";
+const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqX5CpA9NZM9Czuv_sXZRB_lkwCfhdA6NFrh_-f6sQjtmQafRnm592ubuI-5b6u-gi/exec";
 const API_KEY = "MINHA_CHAVE_SECRETA_RRMCSD_2025_!@#F3q8x";
 
 function validateEmail(email) {
@@ -157,14 +157,28 @@ function initHome(){
       } else res();
     });
   };
+  
+async function subscribeLead(email, nome = "") {
+  const payload = {
+    key: API_KEY,
+    action: "hubspot_subscribe",
+    email: email.trim().toLowerCase(),
+    nome: nome.trim()
+  };
 
-  async function subscribeLead(email, nome = "") {
-    const payload = { key: API_KEY, email: String(email||"").trim().toLowerCase(), nome: String(nome||"").trim(), source: "rrmcsd-coming-soon", userAgent: navigator.userAgent };
-    try {
-      await fetch(APPSCRIPT_URL, { method: "POST", mode: "no-cors", keepalive: true, body: JSON.stringify(payload) });
-      return { ok: true, opaque: true };
-    } catch (e) { return { ok: false, error: String(e) }; }
+  try {
+    const resp = await fetch(APPSCRIPT_URL, {
+      method: "POST",
+      mode: "cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const json = await resp.json();
+    return json;
+  } catch (e) {
+    return { ok: false, error: String(e) };
   }
+}
 
   const form = document.getElementById("newsletter");
   if (form) on(form, "submit", e => e.preventDefault());
@@ -411,12 +425,25 @@ function initCancel(){
   const eyes = document.querySelectorAll(".eyes-cancel");
 
   async function unsubscribeLead(email) {
-    const payload = { key: API_KEY, action: "unsubscribe", email: String(email||"").trim().toLowerCase(), userAgent: navigator.userAgent };
-    try {
-      await fetch(APPSCRIPT_URL, { method: "POST", mode:"no-cors", keepalive:true, body: JSON.stringify(payload) });
-      return { ok:true };
-    } catch(err){ return { ok:false, error:err }; }
+  const payload = {
+    key: API_KEY,
+    action: "hubspot_unsubscribe",
+    email: String(email || "").trim().toLowerCase(),
+    userAgent: navigator.userAgent
+  };
+  try {
+    await fetch(APPSCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors", // troque para "cors" se configurar CORS no Apps Script
+      keepalive: true,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: String(err) };
   }
+}
 
   const onClickUnsub = async () => {
     if (inputCancel.value.includes("@") && validateEmail(inputCancel.value)) {
