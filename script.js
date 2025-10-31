@@ -14,7 +14,7 @@ function on(el, type, fn, opts){
 }
 
 // === Apps Script Web App (sem mudanças) ======================================
-const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbzdBY5RxnqYZNGZKx-ixYuAS9tA7HLBEvdBgG3m4fa9Fw5oaaz9HYMA9fQ4lzdC7G-r/exec";
+const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbzzpb-FI5o_nx7lafCo3J2863c-v-w5YepSaPNTJItOM_JTA2iYrDH9VHB5_ZoaJnqJ/exec";
 const API_KEY = "MINHA_CHAVE_SECRETA_RRMCSD_2025_!@#F3q8x";
 
 function validateEmail(email) {
