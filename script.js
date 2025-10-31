@@ -14,7 +14,7 @@ function on(el, type, fn, opts){
 }
 
 // === Apps Script Web App (sem mudanças) ======================================
-const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVlrBunYH5E0iFbfbgceN25YOKGMN0v-p2xseaRMUTd8F2UikE-pzut94sCvBgIibi/exec";
+const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTFA_a_f2jWcF2_f4qC7-9OKSagBvkY1iD_ZdJ6cgrDTotYgN5U2FD_7x6z9au44D9/exec";
 const API_KEY = "MINHA_CHAVE_SECRETA_RRMCSD_2025_!@#F3q8x";
 
 function validateEmail(email) {
@@ -158,29 +158,13 @@ function initHome(){
     });
   };
 
-async function subscribeLead(email, nome = "") {
-  const payload = {
-    key: API_KEY,
-    action: "hubspot_subscribe",
-    email: email.trim().toLowerCase(),
-    nome: nome.trim()
-  };
-
-  try {
-    const resp = await fetch(APPSCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-
-    // ✅ Retorno direto em JSON
-    const json = await resp.json();
-    return json;
-  } catch (e) {
-    console.error("Erro na inscrição:", e);
-    return { ok: false, error: String(e) };
+  async function subscribeLead(email, nome = "") {
+    const payload = { key: API_KEY, email: String(email||"").trim().toLowerCase(), nome: String(nome||"").trim(), source: "rrmcsd-coming-soon", userAgent: navigator.userAgent };
+    try {
+      await fetch(APPSCRIPT_URL, { method: "POST", mode: "no-cors", keepalive: true, body: JSON.stringify(payload) });
+      return { ok: true, opaque: true };
+    } catch (e) { return { ok: false, error: String(e) }; }
   }
-}
 
   const form = document.getElementById("newsletter");
   if (form) on(form, "submit", e => e.preventDefault());
@@ -427,28 +411,12 @@ function initCancel(){
   const eyes = document.querySelectorAll(".eyes-cancel");
 
   async function unsubscribeLead(email) {
-  const payload = {
-    key: API_KEY,
-    action: "hubspot_unsubscribe",
-    email: String(email || "").trim().toLowerCase(),
-    userAgent: navigator.userAgent
-  };
-
-  try {
-    const resp = await fetch(APPSCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-
-    // ✅ Lê o retorno do servidor (não ignora mais a resposta)
-    const json = await resp.json();
-    return json;
-  } catch (err) {
-    console.error("Erro no cancelamento:", err);
-    return { ok: false, error: String(err) };
+    const payload = { key: API_KEY, action: "unsubscribe", email: String(email||"").trim().toLowerCase(), userAgent: navigator.userAgent };
+    try {
+      await fetch(APPSCRIPT_URL, { method: "POST", mode:"no-cors", keepalive:true, body: JSON.stringify(payload) });
+      return { ok:true };
+    } catch(err){ return { ok:false, error:err }; }
   }
-}
 
   const onClickUnsub = async () => {
     if (inputCancel.value.includes("@") && validateEmail(inputCancel.value)) {
