@@ -853,7 +853,7 @@ footer{
 /* PRIVACIDADE */ /* PRIVACIDADE */ /* PRIVACIDADE */ /* PRIVACIDADE */
 
 .body-privacidade{
-    background-color: #dadada;
+    background-color: #d1d1d1;
     color: #181818;
 }
 
@@ -910,4 +910,255 @@ model-viewer {
 }
 model-viewer::part(default-progress-bar) {
     display: none;
+}
+
+
+/*
+ RESPONSIVE RESPONSIVE RESPONSIVE RESPONSIVE
+RESPONSIVE RESPONSIVE RESPONSIVE RESPONSIVE
+RESPONSIVE RESPONSIVE RESPONSIVE RESPONSIVE
+RESPONSIVE RESPONSIVE RESPONSIVE RESPONSIVE
+RESPONSIVE RESPONSIVE RESPONSIVE RESPONSIVE
+RESPONSIVE RESPONSIVE RESPONSIVE RESPONSIVE
+*/
+
+@media (max-width: 768px) {
+
+    /* INIT BASE */  /* INIT BASE */ /* INIT BASE */ /* INIT BASE */
+    /* INIT BASE */ /* INIT BASE */ /* INIT BASE */ /* INIT BASE */
+    /* INIT BASE */ /* INIT BASE */ /* INIT BASE */ /* INIT BASE */ 
+    /* INIT BASE */ /* INIT BASE */ /* INIT BASE */ /* INIT BASE */
+
+    .modal-msg{
+        width: 280px;
+        height: 400px;
+        gap: 30px;
+        text-align: center;
+    }
+
+    .title-msg{
+        margin-top: 30px;
+    }
+
+    .body-text-msg{
+        font-size: 12pt;
+    }
+
+    .fechar-msg{
+        font-size: 16pt;
+        width: 40px;
+        height: 40px;
+    }
+
+    #eye-layer{
+        top: 28px;
+        left: 20px;
+    }
+
+    .eye{
+         width: 30px;
+    }
+
+    #rrmcsd-img{
+        width: 75px;
+        
+    }
+
+    /* INIT HOME */ /* INIT HOME */ /* INIT HOME */ /* INIT HOME */
+    /* INIT HOME */ /* INIT HOME */ /* INIT HOME */ /* INIT HOME */
+    /* INIT HOME */ /* INIT HOME */ /* INIT HOME */ /* INIT HOME */
+    /* INIT HOME */ /* INIT HOME */ /* INIT HOME */ /* INIT HOME */
+    /* INIT HOME */ /* INIT HOME */ /* INIT HOME */ /* INIT HOME */
+
+    #body-home{
+        overflow: hidden;
+    }
+
+    #text-modal{
+        font-size: 24pt;
+        letter-spacing: 1px;
+        margin-top: -70px;
+    }
+
+    #fechar-modal{
+        width: 120px;
+        height: 45px;
+        font-size: 14pt;
+    }
+
+    #div-newsletter{
+        padding: 0px 10px;
+    }
+
+    #label-newsletter{
+        margin-right: 0px;
+    }
+
+    #input-newsletter{
+        display: none;
+        width:180px;
+    }
+    
+    #button-newsletter{
+        display: block;
+        animation-delay: 0.5s;
+        opacity: 1;
+        pointer-events: none;
+    }
+
+    #icon-send{
+        width: 18px;
+        margin-right: 5px;
+    }
+
+    #link-msg-home{
+        font-size: 12pt;
+    }
+
+    #logotipo{
+        width: 220px;
+        margin-top: -15px;
+    }
+
+    #eye-3d{
+        height: 120px;
+        margin-top: -100px;
+    }
+    #title{
+        font-size: 34pt;
+        letter-spacing: 2px;
+    }
+
+    footer{
+        width: 95%;
+        height: 230px;
+        justify-content: center;
+        border-radius: 35px 35px 0px 0px;
+    }
+
+    #social-media{
+        width: 250px;
+        justify-content: space-around;
+        padding-top: 0px;
+    }
+
+    .icon-svg{
+        width: 20px;
+        animation: greenPulse 3.5s infinite ease-in-out;
+        }
+
+    .button-circle:hover {
+    transform: scale(1);
+
+    }
+
+    .button-circle:hover .icon-svg {
+        fill: #dadada;
+    }
+
+    .footer-text{
+        font-size: 10pt;
+        margin-top: 0;
+        padding-top: 0;
+        
+    }
+
+    .title-footer{
+        margin: 0;
+        margin-top: 20px;
+        margin-bottom: 5px;
+        font-weight: 700;
+    }
+
+   
+    @keyframes greenPulse {
+    0% {
+        fill: #dadada;
+    }
+    5% {
+        fill: #a3fc83;
+    }
+    10% {
+        fill: #a3fc83;
+    }
+    30% {
+        fill: #dadada;
+    }
+    100% {
+        fill: #dadada;
+    }
+    150% {
+        fill: #dadada;
+    }
+    }
+
+    #social-media > a:nth-child(1) .icon-svg { animation-delay: 0s; }
+    #social-media > a:nth-child(2) .icon-svg { animation-delay: .3s; }
+    #social-media > a:nth-child(3) .icon-svg { animation-delay: .6s; }
+    #social-media > a:nth-child(4) .icon-svg { animation-delay: 1s; }
+    #social-media > a:nth-child(5) .icon-svg { animation-delay: 1.3s; }
+
+
+
+/* INIT CANCEL */ /* INIT CANCEL */ /* INIT CANCEL */ /* INIT CANCEL */
+/* INIT CANCEL */ /* INIT CANCEL */ /* INIT CANCEL */ /* INIT CANCEL */
+/* INIT CANCEL */ /* INIT CANCEL */ /* INIT CANCEL */ /* INIT CANCEL */
+/* INIT CANCEL */ /* INIT CANCEL */ /* INIT CANCEL */ /* INIT CANCEL */
+
+    #body-cancel{
+        overflow-x: hidden;
+    }
+
+    #link-msg-cancel{
+        font-size: 12pt;
+    }
+
+        .container{
+        padding: 0;
+    }
+
+    .inner-container{
+        width: 140px;
+        margin: 0;
+        padding: 0;
+    }
+
+    #title-cancelamento{
+        font-size: 14pt;
+        letter-spacing: 0.8px;
+        margin-bottom: 20px;
+    }
+
+    #input-cancelamento{
+        width: 240px;
+        height: 45px;
+        font-size: 11pt;
+    }
+    
+    #unsubscribe{
+        width: 38px;
+    }
+
+    #icon-cancelamento{
+        width: 38px;
+    }
+
+    .update{
+        text-align: left;
+    }
+
+
+}
+
+/* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */
+/* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */
+/* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */
+/* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */
+/* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */ /* INIT PRIVACIDADE USO */
+
+@media (max-width: 1200px) {
+    #body-privacidade-uso {
+        overflow-x: hidden;
+        padding: 80px 30px;
+    }
 }
