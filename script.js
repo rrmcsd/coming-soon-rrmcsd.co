@@ -122,6 +122,7 @@ function initParticlesOnCanvas(){
 
 // === MÓDULO: Home (modal + newsletter + flicker) ============================
 function initHome(){
+
   if (document.body.id !== 'body-home') return;
 
   // elementos
