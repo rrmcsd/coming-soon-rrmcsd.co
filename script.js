@@ -492,3 +492,99 @@ document.addEventListener('turbo:before-cache', () => {
   // limpe temporários, pare animações, etc.
   cleanup();
 });
+
+// --- Compat layer: garantir boot em caso de bfcache / snapshot restore ----------
+/*
+  Problema resolvido aqui:
+  - 'pageshow' com e.persisted == true cobre quando o navegador restaura do bfcache
+  - 'turbo:before-render' garante que limpemos antes do Turbo injetar um novo snapshot
+  - fazemos cleanup() antes e re-boot() com micro-tick para garantir que o layout esteja pronto
+*/
+
+window.addEventListener('pageshow', (e) => {
+  // se a página foi restaurada do bfcache, re-inicialize tudo
+  if (e.persisted) {
+    try { cleanup(); } catch(_) {}
+    // micro timeout para permitir que o browser finalize restauro de layout
+    setTimeout(() => {
+      try { boot(); } catch(err) { console.error('boot error (pageshow):', err); }
+    }, 0);
+  }
+});
+
+// Turbo pode reusar elementos permanentes — limpe antes de renderizar o novo snapshot
+document.addEventListener('turbo:before-render', () => {
+  try { cleanup(); } catch(_) {}
+});
+
+// reforço: se turbo:load é disparado normalmente, boot já roda (você já tem isso).
+// Mas para depuração, temporariamente descomente o log:
+// document.addEventListener('turbo:load', () => console.log('turbo:load'));
+// window.addEventListener('pageshow', e => console.log('pageshow persisted?', e.persisted));
+
+// --- Reset explícito para elementos "permanentes" que você modificou via JS -----
+// Se você *realmente* precisa manter alguns elementos com data-turbo-permanent,
+// faça um reset explícito aqui para evitar "snapshot sujo" (mantenha a lista curta).
+
+document.addEventListener('turbo:before-cache', () => {
+  // exemplo: resetar estilos inline que o JS aplica
+  try {
+    const rrmcsdImg = document.getElementById('rrmcsd-img');
+    if (rrmcsdImg) {
+      rrmcsdImg.style.display = ''; // remove override
+      rrmcsdImg.classList.remove('fade-bottom-in','fade-bottom-out');
+    }
+    const inputNews = document.getElementById('input-newsletter');
+    const labelNews = document.getElementById('label-newsletter');
+    const sendButton = document.getElementById('button-newsletter');
+    const divNews = document.getElementById('div-newsletter');
+    const sendIcon = document.getElementById('icon-send');
+    const textModal = document.getElementById('text-modal')
+
+    if (inputNews) {
+      inputNews.style.display = '';
+      inputNews.style.width = '';
+      inputNews.value = '';
+      inputNews.style.border = '';
+      inputNews.classList.remove('fade-bottom-in','fade-bottom-out');
+    }
+    if (labelNews) {
+      labelNews.style.display = '';
+      labelNews.classList.remove('fade-bottom-in','fade-bottom-out');
+    }
+    if (sendButton) {
+      sendButton.style.display = '';
+      sendButton.classList.remove('fade-bottom-in','fade-bottom-out');
+      sendButton.style.pointerEvents = '';
+    }
+    if (divNews) {
+      divNews.style.width = '';
+      divNews.style.padding = '';
+      divNews.classList.remove('color-loop','fade-bottom-out');
+      divNews.style.pointerEvents = '';
+    }
+    if (sendIcon) {
+      sendIcon.style.display = '';
+      sendIcon.classList.remove('zoom-in-out');
+      sendIcon.style.opacity = '';
+    }
+
+    // Supondo que flickerTO é global ou acessível aqui
+    if (typeof flickerTO !== 'undefined') {
+        clearTimeout(flickerTO);
+        flickerTO = null;
+    }
+
+    if (textModal) {
+        // Restaurar o HTML original
+        textModal.innerHTML = `
+            marketing
+            comunicação
+            soluções digitais
+        `;
+    }
+
+  } catch (err) {
+    console.error('reset before-cache erro:', err);
+  }
+});
