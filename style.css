@@ -14,6 +14,16 @@
     font-family: Inter;
 }
 
+ .rrmcsd-colors {
+        fill: url(#gradient-rrmcsd-white);
+}
+
+.rrmcsd-shadow {
+    mix-blend-mode: multiply;
+    opacity: .25;
+    isolation: isolate;
+}
+
 
 .video-background {
   position: fixed;
@@ -857,6 +867,9 @@ footer{
     color: #181818;
 }
 
+.body-privacidade .rrmcsd-colors {
+  fill: url(#gradient-rrmcsd-black);
+}
 
 .a-privacidade{
     color: #176b39;
