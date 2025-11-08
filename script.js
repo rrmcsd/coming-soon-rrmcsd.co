@@ -539,7 +539,7 @@ document.addEventListener('turbo:before-cache', () => {
     const sendButton = document.getElementById('button-newsletter');
     const divNews = document.getElementById('div-newsletter');
     const sendIcon = document.getElementById('icon-send');
-    const textModal = document.getElementById('text-modal')
+    const textModal = document.getElementById('text-modal');
 
     if (inputNews) {
       inputNews.style.display = '';
