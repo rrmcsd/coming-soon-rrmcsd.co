@@ -128,9 +128,14 @@ RESPONSIVE RESPONSIVE RESPONSIVE RESPONSIVE
     }
 
     .icon-svg{
-        width: 20px;
+        width: 16px;
         animation: greenPulse 3.5s infinite ease-in-out;
-        }
+    }
+
+    .button-circle{
+        width: 35px;
+        height: 35px;
+    }
 
     .button-circle:hover {
     transform: scale(1);
@@ -182,6 +187,7 @@ RESPONSIVE RESPONSIVE RESPONSIVE RESPONSIVE
     #social-media > a:nth-child(3) .icon-svg { animation-delay: .6s; }
     #social-media > a:nth-child(4) .icon-svg { animation-delay: 1s; }
     #social-media > a:nth-child(5) .icon-svg { animation-delay: 1.3s; }
+    #social-media > a:nth-child(6) .icon-svg { animation-delay: 1.6s; }
 
 
 

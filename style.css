@@ -458,7 +458,7 @@ footer{
 }
 
 .icon-in{
-    transform: translateY(0px);
+    transform: translateY(0.5px);
 }
 
 .button-circle:hover {
